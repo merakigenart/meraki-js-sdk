@@ -9,20 +9,20 @@ The advantage in having an SDK is that there is a single, predictable way to wri
 
 - `Meraki`
   - `data`
-    - `tokenId`
-    - `hash`
-  - `random`
+    - `tokenId` - token id
+    - `hash` - platform-provided random value
+  - `random` - helper methods for generating better random data based on the hash
     - `integer()`
     - `decimal()`
     - `boolean()`
-  - `canvas`
+  - `canvas` - canvas size to use when generating the image, determined by browser/window size
     - `width`
     - `height`
 
- - `MerakiScript`
-   - `initialize()`
-   - `execute()`
-   - `configure()`
+ - `MerakiScript` - abstract class that's extended by the script implementation
+   - `initialize()` - called prior to execution/generation
+   - `execute()` - generates the image
+   - `configure()` - defines configuration info for the script
       ```js
         return {
             renderDelayMs: number;
@@ -32,7 +32,10 @@ The advantage in having an SDK is that there is a single, predictable way to wri
     ```
 
 
+
 ```js
+// Sample script implementation
+
 class Script extends MerakiScript {
     execute() {
         const random1 = Meraki.random.integer();
