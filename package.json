@@ -1,7 +1,7 @@
 {
-    "name": "package-skeleton",
+    "name": "meraki-sdk",
     "version": "1.0.0",
-    "description": "{{package.description}}",
+    "description": "meraki sdk",
     "main": "dist/index.js",
     "scripts": {
         "analyze:deps:circular": "node_modules/.bin/madge --extensions js,ts --circular --ts-config ./tsconfig.json src/**",
@@ -19,7 +19,7 @@
         "dev": "npm run build:dev && node dist/index.js",
         "prepare": "husky install"
     },
-    "author": "{{package.author.name}} <{{package.author.email}}>",
+    "author": "Patrick Organ <patrick@permafrost.dev>",
     "license": "MIT",
     "lint-staged": {
         "*.{js,ts}": [

@@ -1,10 +1,9 @@
-# package-skeleton
+# meraki-sdk
 
 ---
 
-Template Setup: run `node configure-package.js` to configure.
 
-{{package.description}}
+meraki sdk
 
 ## Setup
 
@@ -16,7 +15,7 @@ npm run dev
 
 ## Testing
 
-`package-skeleton` uses Jest for unit tests.  To run the test suite:
+`meraki-sdk` uses Jest for unit tests.  To run the test suite:
 
 `npm run test`
 
@@ -36,7 +35,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [{{package.author.name}}](https://github.com/{{package.author.github}})
+- [Patrick Organ](https://github.com/patinthehat)
 - [All Contributors](../../contributors)
 
 ## License
