@@ -25,12 +25,10 @@ The advantage in having an SDK is that there is a single, predictable way to wri
    - `configure()` - defines configuration info for the script
       ```js
         return {
-            renderDelayMs: number;
-            libraryName: string;
-            libraryVersion: string;
+            renderDelayMs: number; //approximate number of milliseconds needed to render the image; optional
+            libraryName: string; //library used for rendering: p5, three, etc. required.
+            libraryVersion: string; //library version; optional
         }
-    ```
-
 
 
 ```js
