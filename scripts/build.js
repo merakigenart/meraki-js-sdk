@@ -13,9 +13,10 @@ const buildConfig = {
     bundle: true,
     minify: false,
     constants: {},
+    target: 'chrome74',
     platform: {
-        name: 'node',
-        version: 16,
+        name: 'browser',
+        version: 74,
     },
 };
 
@@ -42,7 +43,7 @@ class Builder {
             bundle: buildConfig.bundle,
             format: buildConfig.format,
             platform: buildConfig.platform.name,
-            target: `${buildConfig.platform.name}${buildConfig.platform.version}`,
+            target: buildConfig.target || `${buildConfig.platform.name}${buildConfig.platform.version}`,
             allowOverwrite: true,
             minify: buildConfig.minify,
             metafile: true,
