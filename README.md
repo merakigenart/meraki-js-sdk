@@ -2,8 +2,55 @@
 
 ---
 
+Meraki Script SDK
 
-meraki sdk
+
+- `Meraki`
+  - `data`
+    - `tokenId`
+    - `hash`
+  - `random`
+    - `integer()`
+    - `decimal()`
+    - `boolean()`
+  - `canvas`
+    - `width`
+    - `height`
+
+ - `MerakiScript`
+   - `initialize()`
+   - `execute()`
+   - `configure()`
+      ```js
+        return {
+            renderDelayMs: number;
+            libraryName: string;
+            libraryVersion: string;
+        }
+    ```
+
+
+```js
+class Script extends MerakiScript {
+    execute() {
+        const random1 = Meraki.random.integer();
+        // generate image here
+    }
+
+    initialize() {
+        //called prior to execution
+    }
+
+    configure() {
+        return {
+            renderDelayMs: 100,
+            libraryName: 'p5',
+            librarVersion: '1.4.0',
+        }
+    }
+}
+```
+
 
 ## Setup
 
