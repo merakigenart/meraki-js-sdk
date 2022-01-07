@@ -4,6 +4,8 @@
 
 Meraki Script SDK
 
+The advantage in having an SDK is that there is a single, predictable way to write the scripts, regardless of whether it's using `p5`, `three`, or another library for image generation. It also improves the overall development experience, as long as the SDK is high-quality, easy to use, and has great documentation.
+
 
 - `Meraki`
   - `data`
