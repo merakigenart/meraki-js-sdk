@@ -61,32 +61,35 @@ window.Script = Script;
 // render the images from the script.
 
 // -- library (p5, etc) script tag included here --//
-
 // -- inject the compiled sdk library here -- //
-
-window.Meraki = new Meraki();
-
 // -- sample script from above injected here -- //
 
+// auto-generated code:
 const mScript = new Script();
-
 mScript.render(); //this triggers the creation of the image
 ```
 
+The above code could then be compiled down into es2015, etc. and executed in the browser.
 
-## Setup
+---
+
+## Development Setup
 
 ```bash
+# install dependencies
 npm install
 
-npm run dev
+# compile the sdk library
+npm run build:dev
 ```
 
 ## Testing
 
-`meraki-sdk` uses Jest for unit tests.  To run the test suite:
+`meraki-js-sdk` uses Jest for unit tests.  To run the test suite:
 
-`npm run test`
+```bash
+npm run test
+```
 
 ---
 
