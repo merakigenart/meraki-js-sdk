@@ -52,6 +52,25 @@ class Script extends MerakiScript {
         }
     }
 }
+
+window.Script = Script;
+```
+
+```js
+// sample rendering script included in on pages that dynamically
+// render the images from the script.
+
+// -- library (p5, etc) script tag included here --//
+
+// -- inject the compiled sdk library here -- //
+
+window.Meraki = new Meraki();
+
+// -- sample script from above injected here -- //
+
+const mScript = new Script();
+
+mScript.render(); //this triggers the creation of the image
 ```
 
 
