@@ -8,12 +8,12 @@ const { spawnSync } = require('child_process');
 const buildConfig = {
     basePath: `${__dirname}/..`,
     outdir: 'dist',
-    format: 'cjs',
+    format: 'iife',
     entry: 'src/index.ts',
     bundle: true,
     minify: false,
     constants: {},
-    target: 'chrome74',
+    target: 'es2015',
     platform: {
         name: 'browser',
         version: 74,

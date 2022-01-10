@@ -1,4 +1,4 @@
-# meraki-sdk
+# meraki-js-sdk
 
 ---
 
@@ -32,12 +32,23 @@ The advantage in having an SDK is that there is a single, predictable way to wri
 
 
 ```js
-// Sample script implementation
+// Sample script implementation using p5.js
 
 class Script extends MerakiScript {
     execute() {
         const random1 = Meraki.random.integer();
-        // generate image here
+        const random2 = Meraki.random.integer();
+
+        createCanvas(windowWidth, windowHeight);
+
+        fill(234, 31, 81);
+        noStroke();
+
+        rect(55, 55, 250, 250);
+        fill(255);
+
+        textSize(14);
+        text("hello world", 50, 250);
     }
 
     initialize() {
@@ -48,12 +59,13 @@ class Script extends MerakiScript {
         return {
             renderDelayMs: 100,
             libraryName: 'p5',
-            librarVersion: '1.4.0',
+            libraryVersion: '1.4.0',
         }
     }
 }
 
-window.Script = Script;
+// You must call createArtworkScript() to properly setup the class instance
+createArtworkScript(new Script());
 ```
 
 ```js
@@ -64,9 +76,9 @@ window.Script = Script;
 // -- inject the compiled sdk library here -- //
 // -- sample script from above injected here -- //
 
-// auto-generated code:
-const mScript = new Script();
-mScript.render(); //this triggers the creation of the image
+// auto-generated code
+// this object is assigned when createArtworkScript() is called:
+window.tokenScript.render(); //this triggers the creation of the image
 ```
 
 The above code could then be compiled down into es2015, etc. and executed in the browser.
