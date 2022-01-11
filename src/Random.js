@@ -2,7 +2,7 @@ export class Random {
     prngA;
     prngB;
 
-    constructor(tokenData = { hash: '', tokenId: '' }) {
+    constructor(tokenData = { tokenHash: '', tokenId: '' }) {
         this.useA = false;
         let sfc32 = class {
             handler;
@@ -27,42 +27,60 @@ export class Random {
                 };
             }
         };
-        const hashPartLength = (tokenData.hash.length - 2) / 2;
+        const hashPartLength = (tokenData.tokenHash.length - 2) / 2;
+        console.log('hashPartLength', hashPartLength);
+
         // seed prngA with first half of tokenData.hash
-        this.prngA = new sfc32(tokenData.hash.substr(2, hashPartLength));
+        this.prngA = new sfc32(tokenData.tokenHash.substr(2, hashPartLength)).handler;
         // seed prngB with second half of tokenData.hash
-        this.prngB = new sfc32(tokenData.hash.substr(hashPartLength + 2, hashPartLength));
+        this.prngB = new sfc32(tokenData.tokenHash.substr(hashPartLength + 2, hashPartLength)).handler;
 
         for (let i = 0; i < 1e6; i += 2) {
-            this.prngA.handler();
-            this.prngB.handler();
+            this.prngA();
+            this.prngB();
         }
     }
 
     // random number between 0 (inclusive) and 1 (exclusive)
-    randomDecimal() {
+    decimal() {
         this.useA = !this.useA;
-        return this.useA ? this.prngA.handler() : this.prngB.handler();
+        return this.useA ? this.prngA() : this.prngB();
     }
 
     // random number between a (inclusive) and b (exclusive)
-    randomNumber(a, b) {
-        return a + (b - a) * this.randomDecimal();
+    number(a, b) {
+        if (a === undefined) {
+            a = 0;
+        }
+
+        if (b === undefined) {
+            b = Number.MAX_VALUE;
+        }
+
+        return a + (b - a) * this.decimal();
     }
 
     // random integer between a (inclusive) and b (inclusive)
     // requires a < b for proper probability distribution
-    randomInteger(a, b) {
-        return Math.floor(this.randomNumber(a, b + 1));
+    integer(a, b) {
+        if (a === undefined) {
+            a = 0;
+        }
+
+        if (b === undefined) {
+            b = Number.MAX_VALUE;
+        }
+
+        return Math.floor(this.number(a, b + 1));
     }
 
     // random boolean with p as percent likelihood of true
-    randomBoolean(p = 50) {
-        return this.randomDecimal() < p * 0.1;
+    boolean(p = 50) {
+        return this.decimal() < p * 0.1;
     }
 
     // random value in an array of items
-    randomElement(list) {
-        return list[this.randomInteger(0, list.length - 1)];
+    element(list) {
+        return list[this.integer(0, list.length - 1)];
     }
 }

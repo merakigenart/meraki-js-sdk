@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 
 import { Random } from '@/Random';
+import config from './config';
+import { MerakiScript } from './MerakiScript';
 
 export interface MerakiCanvasInformation {
     height: number;
@@ -29,6 +31,12 @@ export class Meraki {
             height: globalThis.innerHeight,
             width: globalThis.innerWidth,
         };
+    }
+
+    public registerScript(scriptObject: MerakiScript): MerakiScript {
+        globalThis[config.scriptInstanceName] = scriptObject; // eslint-disable-line no-undef
+
+        return scriptObject;
     }
 
     constructor(tokenId: string, hash: string) {

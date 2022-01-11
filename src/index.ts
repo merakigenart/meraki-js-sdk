@@ -2,24 +2,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Meraki } from './Meraki';
-import { MerakiScript, createArtworkScript } from './MerakiScript';
+import { MerakiScript } from './MerakiScript';
 import { generateNewSdkTemplate } from './Utilities';
-
-//const window: Record<string, any> = globalThis || {};
-
-// declare global {
-//     interface Window {
-//         tokenScript: MerakiScript;
-//         merakiSdk: Record<any, any>;
-//     }
-// }
 
 const window = () => globalThis;
 
 const merakiSdk = {
     Meraki: new Meraki(window().tokenId, window().tokenHash),
     MerakiScript,
-    createArtworkScript,
     generateNewSdkTemplate,
 };
 
@@ -31,7 +21,7 @@ window.merakiRender = () => {
     window().tokenScript.render();
 };
 
-window.createArtworkScript = merakiSdk.createArtworkScript;
+window.createArtworkScript = merakiSdk.Meraki.createArtworkScript;
 
 function setup() {
     // eslint-disable-line no-unused-vars

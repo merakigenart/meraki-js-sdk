@@ -1,10 +1,3 @@
-export const createArtworkScript = (scriptObject: MerakiScript): MerakiScript => {
-    // @ts-ignore
-    window.tokenScript = scriptObject; // eslint-disable-line no-undef
-
-    return scriptObject;
-};
-
 export interface MerakiScriptConfiguration {
     renderTimeMs?: number;
     library?: {
@@ -16,6 +9,8 @@ export interface MerakiScriptConfiguration {
 export abstract class MerakiScript {
     public abstract execute(): void;
     public abstract configure(): MerakiScriptConfiguration;
+
+    public draw: CallableFunction | null = null;
 
     public initialize() {
         //

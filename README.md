@@ -1,34 +1,24 @@
-# meraki-js-sdk
+# Meraki Script SDK
 
 ---
 
-Meraki Script SDK
+### Writing Scripts for Meraki
 
-The advantage in having an SDK is that there is a single, predictable way to write the scripts, regardless of whether it's using `p5`, `three`, or another library for image generation. It also improves the overall development experience, as long as the SDK is high-quality, easy to use, and has great documentation.
+To create a script for Meraki, you must use the framework (SDK) we provide via an npm package. This allows for uniformity between scripts, regardless of what rendering library is used. Additionally, this makes it easier to create scripts as there's only a single, documented way to write a valid Meraki script.
 
+The core of your script will be a modern ECMAScript class named `Script` that extends a `MerakiScript` class, as shown below:
 
-- `Meraki`
-  - `data`
-    - `tokenId` - token id
-    - `hash` - platform-provided random value
-  - `random` - helper methods for generating better random data based on the hash
-    - `integer()`
-    - `decimal()`
-    - `boolean()`
-  - `canvas` - canvas size to use when generating the image, determined by browser/window size
-    - `width`
-    - `height`
+```js
+class Script extends MerakiScript {
+    //
+}
+```
 
- - `MerakiScript` - abstract class that's extended by the script implementation
-   - `initialize()` - called prior to execution/generation
-   - `execute()` - generates the image
-   - `configure()` - defines configuration info for the script
-      ```js
-        return {
-            renderDelayMs: number; //time in ms needed to render the image; optional
-            libraryName: string; //library used for rendering: p5, three, etc. required.
-            libraryVersion: string; //library version; optional
-        }
+### Creating Scripts for P5
+
+When creating a script class to be rendered by the `p5` library, you may largely use the same code that you'd use when not using a framework.  The primary difference is that the code normally placed within `setup()` is now placed inside of the `execute()` method in your `MerakiScript` class.
+
+If you have a `draw()` function defined, you should instead add a `draw()` method to your script class and place the code there.
 
 
 ```js
@@ -48,7 +38,7 @@ class Script extends MerakiScript {
         fill(255);
 
         textSize(14);
-        text("hello world", 50, 250);
+        text("hello world !", 50, 250);
     }
 
     initialize() {
@@ -64,36 +54,46 @@ class Script extends MerakiScript {
     }
 }
 
-// You must call createArtworkScript() to properly setup the class instance
-createArtworkScript(new Script());
+// You must call Meraki.registerScript() to properly setup the class instance
+Meraki.registerScript(new Script());
 ```
+
+### Random values
+
+Your script may require random values (integers, decimals, etc.) but are required to use the Meraki-provided value _(the "token random hash")_ as the basis for all randomness.  To make it easier, the SDK provides several helper methods to generate random values that are based on the token random hash.
+
+You may access the helper methods via the `Meraki.random` class, which provides the following methods:
+
+- `decimal()`: returns a random decimal between 0 and 1.
+- `number(min, max)`: random number; both `min` and `max` are optional integer values
+- `integer(min, max)`: random integer; both `min` and `max` are optional integer values
+- `boolean(percent)`: random boolean, where optional `percent` is the percentage chance of a `true` result
+- `element(array)`: returns a random element from the provided array
 
 ```js
-// sample rendering script included in on pages that dynamically
-// render the images from the script.
+    // return true approxamtely 50% of the time
+    for(let i = 0; i < 10; i++) {
+        console.log(`loop ${i + 1}: `, Meraki.random.boolean());
+    }
 
-// -- library (p5, etc) script tag included here --//
-// -- inject the compiled sdk library here -- //
-// -- sample script from above injected here -- //
-
-// auto-generated code
-// this object is assigned when createArtworkScript() is called:
-window.tokenScript.render(); //this triggers the creation of the image
+    // return true approxamtely 10% of the time
+    for(let i = 0; i < 10; i++) {
+        console.log(`loop ${i + 1}: `, Meraki.random.boolean(10));
+    }
 ```
-
-The above code could then be compiled down into es2015, etc. and executed in the browser.
 
 ---
 
 ## Development Setup
 
-```bash
-# install dependencies
-npm install
+For development of the SDK, you must first install all dependencies, and then run the build script:
 
-# compile the sdk library
+```bash
+npm install
 npm run build:dev
 ```
+
+This process will create a file named `sdk.js` in the `dist` directory.  This is a valid javascript library that may be used within the browser environment for rendering generative art scripts.
 
 ## Testing
 
@@ -102,6 +102,31 @@ npm run build:dev
 ```bash
 npm run test
 ```
+
+---
+
+Notes:
+
+- `Meraki`
+  - `data`
+    - `tokenId` - token id
+    - `hash` - platform-provided random value
+  - `canvas` - canvas size to use when generating the image, determined by browser/window size
+    - `width`
+    - `height`
+
+- `MerakiScript` - abstract class that's extended by the script implementation
+  - `initialize()` - called prior to execution/generation
+  - `execute()` - generates the image
+  - `configure()` - defines configuration info for the script
+
+    ```js
+    return {
+        renderDelayMs: number; //time in ms needed to render the image; optional
+        libraryName: string; //library used for rendering: p5, three, etc. required.
+        libraryVersion: string; //library version; optional
+    }
+    ```
 
 ---
 
