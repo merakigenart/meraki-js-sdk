@@ -2,7 +2,7 @@ export class Random {
     prngA;
     prngB;
 
-    constructor(tokenData) {
+    constructor(tokenData = { hash: '', tokenId: '' }) {
         this.useA = false;
         let sfc32 = class {
             handler;

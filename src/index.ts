@@ -1,26 +1,41 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
-console.log('hello world');
-
 import { Meraki } from './Meraki';
 import { MerakiScript, createArtworkScript } from './MerakiScript';
+import { generateNewSdkTemplate } from './Utilities';
 
-const window: Record<string, any> = globalThis || {};
+//const window: Record<string, any> = globalThis || {};
 
-window.Meraki = new Meraki('tokenId', 'hash');
-window.MerakiScript = MerakiScript;
+// declare global {
+//     interface Window {
+//         tokenScript: MerakiScript;
+//         merakiSdk: Record<any, any>;
+//     }
+// }
 
-window.merakiRender = () => {
-    window.tokenScript.render();
+const window = () => globalThis;
+
+const merakiSdk = {
+    Meraki: new Meraki(window().tokenId, window().tokenHash),
+    MerakiScript,
+    createArtworkScript,
+    generateNewSdkTemplate,
 };
 
-window.createArtworkScript = createArtworkScript;
+window.Meraki = merakiSdk.Meraki;
+window.MerakiScript = merakiSdk.MerakiScript;
+window.merakiSdk = merakiSdk;
+
+window.merakiRender = () => {
+    window().tokenScript.render();
+};
+
+window.createArtworkScript = merakiSdk.createArtworkScript;
 
 function setup() {
     // eslint-disable-line no-unused-vars
-    window.tokenScript.render();
+    window().tokenScript.render();
 }
 
 // //called prior to execution

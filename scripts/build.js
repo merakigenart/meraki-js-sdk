@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-const { realpathSync, readFileSync, writeFileSync, renameSync } = require('fs');
+const { realpathSync, readFileSync, writeFileSync, renameSync, existsSync, copyFileSync } = require('fs');
 const esbuild = require('esbuild');
 const { basename } = require('path');
 const { spawnSync } = require('child_process');
@@ -8,12 +8,12 @@ const { spawnSync } = require('child_process');
 const buildConfig = {
     basePath: `${__dirname}/..`,
     outdir: 'dist',
-    format: 'iife',
+    format: 'esm',
     entry: 'src/index.ts',
     bundle: true,
     minify: false,
     constants: {},
-    target: 'es2015',
+    target: 'es2017',
     platform: {
         name: 'browser',
         version: 74,
@@ -122,6 +122,10 @@ class Builder {
 
         if (this.config.production) {
             this.convertToProductionFile();
+        }
+
+        if (existsSync('dist/index.js')) {
+            copyFileSync(`./dist/index.js`, `./dist/sdk.js`);
         }
     }
 }

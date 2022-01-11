@@ -16,7 +16,8 @@ export class Meraki {
     protected randomObj: Random;
 
     get random() {
-        return this.randomObj;
+        // @ts-ignore
+        return new Random(this.tokenData);
     }
 
     get data() {
@@ -33,6 +34,7 @@ export class Meraki {
     constructor(tokenId: string, hash: string) {
         this.tokenData.tokenId = tokenId;
         this.tokenData.hash = hash;
-        this.randomObj = new Random(this.tokenData);
+        // // @ts-ignore
+        // this.randomObj = new Random(this.tokenData);
     }
 }
