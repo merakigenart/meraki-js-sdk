@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -5,27 +6,25 @@ import { Meraki } from './Meraki';
 import { MerakiScript } from './MerakiScript';
 import { generateNewSdkTemplate } from './Utilities';
 
-const window = () => globalThis;
-
 const merakiSdk = {
-    Meraki: new Meraki(window().tokenId, window().tokenHash),
+    Meraki: new Meraki(globalThis.tokenId, globalThis.tokenHash),
     MerakiScript,
     generateNewSdkTemplate,
 };
 
 window.Meraki = merakiSdk.Meraki;
-window.MerakiScript = merakiSdk.MerakiScript;
-window.merakiSdk = merakiSdk;
+globalThis.MerakiScript = merakiSdk.MerakiScript;
+globalThis.merakiSdk = merakiSdk;
 
-window.merakiRender = () => {
-    window().tokenScript.render();
+globalThis.merakiRender = () => {
+    globalThis.tokenScript.render();
 };
 
-window.registerScript = merakiSdk.Meraki.registerScript;
+globalThis.registerScript = merakiSdk.Meraki.registerScript;
 
 function setup() {
     // eslint-disable-line no-unused-vars
-    window().tokenScript.render();
+    globalThis.tokenScript.render();
 }
 
 // //called prior to execution
