@@ -21,7 +21,7 @@ window.merakiRender = () => {
     window().tokenScript.render();
 };
 
-window.createArtworkScript = merakiSdk.Meraki.createArtworkScript;
+window.registerScript = merakiSdk.Meraki.registerScript;
 
 function setup() {
     // eslint-disable-line no-unused-vars
