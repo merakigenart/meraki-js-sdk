@@ -25,24 +25,27 @@ If you have a `draw()` function defined, you should instead add a `draw()` metho
 // Sample script implementation using p5.js
 
 class Script extends MerakiScript {
+    randomFill = 0;
+
     execute() {
-        const random1 = Meraki.random.integer();
-        const random2 = Meraki.random.integer();
+        createCanvas(Meraki.canvas.width, Meraki.canvas.height);
 
-        createCanvas(windowWidth, windowHeight);
-
-        fill(234, 31, 81);
+        fill(randomFill, 31, 81);
         noStroke();
 
         rect(55, 55, 250, 250);
         fill(255);
 
         textSize(14);
+    }
+
+    draw() {
         text("hello world !", 50, 250);
     }
 
     initialize() {
         //called prior to execution
+        this.randomFill = Meraki.random.integer(0, 200);
     }
 
     configure() {
