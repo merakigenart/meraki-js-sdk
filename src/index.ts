@@ -27,7 +27,7 @@ function setup() {
     globalThis.tokenScript.render();
 }
 
-module.exports = merakiSdk;
+//module.exports = merakiSdk;
 
 // //called prior to execution
 
