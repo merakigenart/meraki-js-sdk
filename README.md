@@ -3,13 +3,13 @@
 - [Meraki Script SDK](#meraki-script-sdk)
     - [Overview](#overview)
     - [Writing Scripts for Meraki](#writing-scripts-for-meraki)
-      - [Creating Scripts for P5](#creating-scripts-for-p5)
-      - [Random values](#random-values)
       - [Required Methods](#required-methods)
         - [`execute()`](#execute)
         - [`initialize()`](#initialize)
         - [`version()`](#version)
         - [`configure()`](#configure)
+      - [Creating Scripts for P5](#creating-scripts-for-p5)
+      - [Random values](#random-values)
     - [Animated Example Script](#animated-example-script)
   - [SDK Development](#sdk-development)
     - [Setup](#setup)
@@ -39,6 +39,64 @@ class Script extends MerakiScript {
 ```
 
 The `MerakiScript` class gets included automatically by the SDK browser bundle during rendering.
+
+#### Required Methods
+
+##### `execute()`
+
+The `execute` method is where you place the code that renders the artwork.  It's equivalent to the `setup` function for `p5`.  If you have a `p5` script, you should extract the body of that function and place it in the `execute` method.
+
+##### `initialize()`
+
+Called before execution to allow for initial setup of class properties or other values and actions to prepare for rendering.  When using the `p5` library, it calls `preload()`.
+
+##### `version()`
+
+You must provide a `version` method that returns a [semantic version](https://github.com/semver/semver/blob/master/semver.md) string for the current version of your script.
+
+```js
+    version() {
+        return '1.2.0';
+    }
+```
+
+##### `configure()`
+
+Every script class must have a `configure` method that returns a `MerakiScriptConfiguration` type object with the following properties:
+- `renderTimeMs`: an integer value that indicates an approximate time in milliseconds for how long the script takes to render. _optional_.
+- `library`: returns an object with `name` and `version` properties that specify the name and desired version of the rendering library to use. _optional_.
+
+```js
+    configure() {
+        return {
+            renderTimeMs: 100,
+            library: {
+                name: 'p5',
+                version: '1.4.0',
+            }
+        };
+    }
+```
+
+All properties are optional, so this would also be a valid `configure()` method:
+
+```js
+    configure() {
+        return {};
+    }
+```
+
+For reference, the `MerakiScriptConfiguration` interface definition is as follows:
+
+```ts
+interface MerakiScriptConfiguration {
+    renderTimeMs?: number;
+    library?: {
+        name?: string;
+        version?: string;
+    };
+}
+```
 
 #### Creating Scripts for P5
 
@@ -111,65 +169,6 @@ You may access the helper methods via the `Meraki.random` class, which provides 
     for(let i = 0; i < 10; i++) {
         console.log(`loop ${i + 1}: `, Meraki.random.boolean(10));
     }
-```
-
-
-#### Required Methods
-
-##### `execute()`
-
-The `execute` method is where you place the code that renders the artwork.  It's equivalent to the `setup` function for `p5`.  If you have a `p5` script, you should extract the body of that function and place it in the `execute` method.
-
-##### `initialize()`
-
-Called before execution to allow for initial setup of class properties or other values and actions to prepare for rendering.  When using the `p5` library, it calls `preload()`.
-
-##### `version()`
-
-You must provide a `version` method that returns a [semantic version](https://github.com/semver/semver/blob/master/semver.md) string for the current version of your script.
-
-```js
-    version() {
-        return '1.2.0';
-    }
-```
-
-##### `configure()`
-
-Every script class must have a `configure` method that returns a `MerakiScriptConfiguration` type object with the following properties:
-- `renderTimeMs`: an integer value that indicates an approximate time in milliseconds for how long the script takes to render. _optional_.
-- `library`: returns an object with `name` and `version` properties that specify the name and desired version of the rendering library to use. _optional_.
-
-```js
-    configure() {
-        return {
-            renderTimeMs: 100,
-            library: {
-                name: 'p5',
-                version: '1.4.0',
-            }
-        };
-    }
-```
-
-All properties are optional, so this would also be a valid `configure()` method:
-
-```js
-    configure() {
-        return {};
-    }
-```
-
-For reference, the `MerakiScriptConfiguration` interface definition is as follows:
-
-```ts
-interface MerakiScriptConfiguration {
-    renderTimeMs?: number;
-    library?: {
-        name?: string;
-        version?: string;
-    };
-}
 ```
 
 
