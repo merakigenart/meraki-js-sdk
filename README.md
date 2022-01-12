@@ -148,6 +148,12 @@ class Script extends MerakiScript {
 registerScript(new Script());
 ```
 
+The resulting animation is rendered in the browser:
+
+<p align="center">
+    <img style="width: 140px;" src="https://user-images.githubusercontent.com/5508707/149060364-5298974f-d1f1-4f4d-a430-7b51154b06d5.gif" alt="sample01" />
+</p>
+
 ---
 
 ## SDK Development
