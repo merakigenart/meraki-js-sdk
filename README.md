@@ -112,7 +112,7 @@ class Script extends MerakiScript {
         rect(55, 55, 250, 250);
         fill(255);
 
-        textSize(25);
+        textSize(23);
         text("Counter: " + this.getSeconds(), 100, 250);
     }
 
@@ -123,7 +123,7 @@ class Script extends MerakiScript {
     }
 
     getSeconds() {
-        return Meraki.random.decimal().toString();
+        return new Date().getSeconds();
     }
 
     draw = () => {
