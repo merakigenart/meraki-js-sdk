@@ -1,6 +1,7 @@
 export class Random {
     prngA;
     prngB;
+    useA = false;
 
     constructor(tokenData = { tokenHash: '', tokenId: '' }) {
         this.useA = false;
@@ -12,7 +13,11 @@ export class Random {
                 let c = parseInt(uint128Hex.substr(16, 8), 16);
                 let d = parseInt(uint128Hex.substr(24, 8), 16);
 
-                this.handler = function () {
+                this.handler = function (seed = 4294967296) {
+                    if (seed === undefined) {
+                        seed = 4294967296;
+                    }
+
                     a |= 0;
                     b |= 0;
                     c |= 0;
@@ -23,17 +28,16 @@ export class Random {
                     b = (c + (c << 3)) | 0;
                     c = (c << 21) | (c >>> 11);
                     c = (c + t) | 0;
-                    return (t >>> 0) / 4294967296;
+                    return (t >>> 0) / seed;
                 };
             }
         };
         const hashPartLength = (tokenData.tokenHash.length - 2) / 2;
-        console.log('hashPartLength', hashPartLength);
 
         // seed prngA with first half of tokenData.hash
-        this.prngA = new sfc32(tokenData.tokenHash.substr(2, hashPartLength)).handler;
+        this.prngA = new sfc32(tokenData.tokenHash.substring(2, hashPartLength)).handler;
         // seed prngB with second half of tokenData.hash
-        this.prngB = new sfc32(tokenData.tokenHash.substr(hashPartLength + 2, hashPartLength)).handler;
+        this.prngB = new sfc32(tokenData.tokenHash.substring(hashPartLength + 2, hashPartLength)).handler;
 
         for (let i = 0; i < 1e6; i += 2) {
             this.prngA();
@@ -42,9 +46,9 @@ export class Random {
     }
 
     // random number between 0 (inclusive) and 1 (exclusive)
-    decimal() {
+    decimal(seed = 4294967296) {
         this.useA = !this.useA;
-        return this.useA ? this.prngA() : this.prngB();
+        return this.useA ? this.prngA(seed) : this.prngB(seed);
     }
 
     // random number between a (inclusive) and b (exclusive)
@@ -54,10 +58,10 @@ export class Random {
         }
 
         if (b === undefined) {
-            b = Number.MAX_VALUE;
+            b = Number.MAX_VALUE - 2;
         }
 
-        return a + (b - a) * this.decimal();
+        return a + (b - a) * this.decimal(b - a);
     }
 
     // random integer between a (inclusive) and b (inclusive)
@@ -68,7 +72,7 @@ export class Random {
         }
 
         if (b === undefined) {
-            b = Number.MAX_VALUE;
+            b = Number.MAX_VALUE - 2;
         }
 
         return Math.floor(this.number(a, b + 1));
