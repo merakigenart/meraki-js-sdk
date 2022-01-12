@@ -6,7 +6,7 @@ import { Meraki } from './Meraki';
 import { MerakiScript } from './MerakiScript';
 import { generateNewSdkTemplate } from './Utilities';
 
-export const merakiSdk = {
+const merakiSdk = {
     Meraki: new Meraki(globalThis.tokenId, globalThis.tokenHash),
     MerakiScript,
     generateNewSdkTemplate,
@@ -26,6 +26,8 @@ function setup() {
     // eslint-disable-line no-unused-vars
     globalThis.tokenScript.render();
 }
+
+module.exports = merakiSdk;
 
 // //called prior to execution
 
