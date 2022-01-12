@@ -4,6 +4,7 @@
     - [Writing Scripts for Meraki](#writing-scripts-for-meraki)
       - [Creating Scripts for P5](#creating-scripts-for-p5)
       - [Random values](#random-values)
+    - [Animated Example Script](#animated-example-script)
   - [SDK Development](#sdk-development)
     - [Setup](#setup)
     - [Testing](#testing)
@@ -96,6 +97,55 @@ You may access the helper methods via the `Meraki.random` class, which provides 
     for(let i = 0; i < 10; i++) {
         console.log(`loop ${i + 1}: `, Meraki.random.boolean(10));
     }
+```
+
+### Animated Example Script
+
+```js
+class Script extends MerakiScript {
+    randomFill = 0;
+
+    redraw() {
+        fill(this.randomFill, 31, 81);
+        noStroke();
+
+        rect(55, 55, 250, 250);
+        fill(255);
+
+        textSize(25);
+        text("Counter: " + this.getSeconds(), 100, 250);
+    }
+
+    execute() {
+        createCanvas(Meraki.canvas.width, Meraki.canvas.height);
+        this.randomFill = Meraki.random.integer(1, 240);
+        this.redraw();
+    }
+
+    getSeconds() {
+        return Meraki.random.decimal().toString();
+    }
+
+    draw = () => {
+        this.redraw();
+    }
+
+    initialize() {
+        super.initialize();
+        console.log('init');
+    }
+
+    configure() {
+        return {
+            renderDelayMs: 200,
+            libraryName: 'p5',
+            libraryVersion: '1.4.0',
+        }
+    }
+}
+
+// You must call createArtworkScript() to properly setup the class instance
+registerScript(new Script());
 ```
 
 ---
