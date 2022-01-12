@@ -1,5 +1,18 @@
 # Meraki Script SDK
 
+- [Meraki Script SDK](#meraki-script-sdk)
+    - [Writing Scripts for Meraki](#writing-scripts-for-meraki)
+      - [Creating Scripts for P5](#creating-scripts-for-p5)
+      - [Random values](#random-values)
+  - [SDK Development](#sdk-development)
+    - [Setup](#setup)
+    - [Testing](#testing)
+  - [Changelog](#changelog)
+  - [Contributing](#contributing)
+  - [Security Vulnerabilities](#security-vulnerabilities)
+  - [Credits](#credits)
+  - [License](#license)
+
 ---
 
 ### Writing Scripts for Meraki
@@ -14,7 +27,7 @@ class Script extends MerakiScript {
 }
 ```
 
-### Creating Scripts for P5
+#### Creating Scripts for P5
 
 When creating a script class to be rendered by the `p5` library, you may largely use the same code that you'd use when not using a framework.  The primary difference is that the code normally placed within `setup()` is now placed inside of the `execute()` method in your `MerakiScript` class.
 
@@ -39,7 +52,7 @@ class Script extends MerakiScript {
         textSize(14);
     }
 
-    draw() {
+    draw = () => {
         text("hello world !", 50, 250);
     }
 
@@ -61,7 +74,7 @@ class Script extends MerakiScript {
 Meraki.registerScript(new Script());
 ```
 
-### Random values
+#### Random values
 
 Your script may require random values (integers, decimals, etc.) but are required to use the Meraki-provided value _(the "token random hash")_ as the basis for all randomness.  To make it easier, the SDK provides several helper methods to generate random values that are based on the token random hash.
 
@@ -87,7 +100,9 @@ You may access the helper methods via the `Meraki.random` class, which provides 
 
 ---
 
-## Development Setup
+## SDK Development
+
+### Setup
 
 For development of the SDK, you must first install all dependencies, and then run the build script:
 
@@ -98,7 +113,7 @@ npm run build:dev
 
 This process will create a file named `sdk.js` in the `dist` directory.  This is a valid javascript library that may be used within the browser environment for rendering generative art scripts.
 
-## Testing
+### Testing
 
 `meraki-js-sdk` uses Jest for unit tests.  To run the test suite:
 

@@ -11,7 +11,7 @@ export interface MerakiCanvasInformation {
 
 export class Meraki {
     protected tokenData: Record<string, any> = {
-        hash: '',
+        tokenHash: '',
         tokenId: '',
     };
 
@@ -41,7 +41,7 @@ export class Meraki {
 
     constructor(tokenId: string, hash: string) {
         this.tokenData.tokenId = tokenId;
-        this.tokenData.hash = hash;
+        this.tokenData.tokenHash = hash;
         // // @ts-ignore
         // this.randomObj = new Random(this.tokenData);
     }
