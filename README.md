@@ -1,9 +1,13 @@
 # Meraki Script SDK
 
 - [Meraki Script SDK](#meraki-script-sdk)
+    - [Overview](#overview)
     - [Writing Scripts for Meraki](#writing-scripts-for-meraki)
       - [Creating Scripts for P5](#creating-scripts-for-p5)
       - [Random values](#random-values)
+      - [The `execute` method](#the-execute-method)
+      - [The `initialize` method](#the-initialize-method)
+      - [The `configure` method](#the-configure-method)
     - [Animated Example Script](#animated-example-script)
   - [SDK Development](#sdk-development)
     - [Setup](#setup)
@@ -16,9 +20,13 @@
 
 ---
 
+### Overview
+
+THe Meraki platform requires that artists provide scripts created using a framework that we provide - this SDK.  At its core, a script is an ES2015+ class that extends a base class and implemented specific methods.
+
 ### Writing Scripts for Meraki
 
-To create a script for Meraki, you must use the framework (SDK) we provide via an npm package. This allows for uniformity between scripts, regardless of what rendering library is used. Additionally, this makes it easier to create scripts as there's only a single, documented way to write a valid Meraki script.
+To create a script for Meraki, you must use the framework (SDK) we provide via an npm package. This allows for uniformity between scripts, regardless of what rendering library is in use. Additionally, this makes it easier to create scripts as there's a single, documented way to write a valid Meraki script.
 
 The core of your script will be a modern ECMAScript class named `Script` that extends a `MerakiScript` class, as shown below:
 
@@ -28,9 +36,11 @@ class Script extends MerakiScript {
 }
 ```
 
+The `MerakiScript` class gets included automatically by the SDK browser bundle during rendering.
+
 #### Creating Scripts for P5
 
-When creating a script class to be rendered by the `p5` library, you may largely use the same code that you'd use when not using a framework.  The primary difference is that the code normally placed within `setup()` is now placed inside of the `execute()` method in your `MerakiScript` class.
+When creating a script class to for rendering by the `p5` library, you may use the same code that you'd use when not using a framework.  The primary difference is that the code placed within `setup()` is now located in the `execute()` method in your `MerakiScript` class.
 
 If you have a `draw()` function defined, you should instead add a `draw()` method to your script class and place the code there.
 
@@ -58,15 +68,17 @@ class Script extends MerakiScript {
     }
 
     initialize() {
-        //called prior to execution
+        //called before execution
         this.randomFill = Meraki.random.integer(0, 200);
     }
 
     configure() {
         return {
-            renderDelayMs: 100,
-            libraryName: 'p5',
-            libraryVersion: '1.4.0',
+            renderTimeMs: 100,
+            library: {
+                name: 'p5',
+                version: '1.4.0',
+            }
         }
     }
 }
@@ -77,7 +89,7 @@ Meraki.registerScript(new Script());
 
 #### Random values
 
-Your script may require random values (integers, decimals, etc.) but are required to use the Meraki-provided value _(the "token random hash")_ as the basis for all randomness.  To make it easier, the SDK provides several helper methods to generate random values that are based on the token random hash.
+Your script may require random values (integers, decimals, etc.), but is required to use the Meraki-provided value _(the "entropy hash")_ as the basis for all randomness.  To make it easier, the SDK provides helper methods to generate predictable random values based on the entropy hash.
 
 You may access the helper methods via the `Meraki.random` class, which provides the following methods:
 
@@ -98,6 +110,54 @@ You may access the helper methods via the `Meraki.random` class, which provides 
         console.log(`loop ${i + 1}: `, Meraki.random.boolean(10));
     }
 ```
+
+
+#### The `execute` method
+
+The `execute` method is where you place the code that renders the artwork.  It's equivalent to the `setup` function for `p5`.  If you have a `p5` script, you should extract the body of that function and place it in the `execute` method.
+
+#### The `initialize` method
+
+Called before execution to allow for initial setup of class properties or other values and actions to prepare for rendering.  When using the `p5` library, it calls `preload()`.
+
+#### The `configure` method
+
+Every script class must have a `configure` method that returns a `MerakiScriptConfiguration` type object with the following properties:
+- `renderTimeMs`: an integer value that indicates an approximate time in milliseconds for how long the script takes to render. _optional_.
+- `library`: returns an object with `name` and `version` properties that specify the name and desired version of the rendering library to use. _optional_.
+
+```js
+    configure() {
+        return {
+            renderTimeMs: 100,
+            library: {
+                name: 'p5',
+                version: '1.4.0',
+            }
+        };
+    }
+```
+
+All properties are optional, so this would also be a valid `configure()` method:
+
+```js
+    configure() {
+        return {};
+    }
+```
+
+For reference, the `MerakiScriptConfiguration` interface definition is as follows:
+
+```ts
+interface MerakiScriptConfiguration {
+    renderTimeMs?: number;
+    library?: {
+        name?: string;
+        version?: string;
+    };
+}
+```
+
 
 ### Animated Example Script
 
@@ -137,9 +197,7 @@ class Script extends MerakiScript {
 
     configure() {
         return {
-            renderDelayMs: 200,
-            libraryName: 'p5',
-            libraryVersion: '1.4.0',
+            renderTimeMs: 50
         }
     }
 }
@@ -148,10 +206,10 @@ class Script extends MerakiScript {
 registerScript(new Script());
 ```
 
-The resulting animation is rendered in the browser:
+The resulting animated image renders in the browser:
 
 <p align="center">
-    <img style="width: 140px;" src="https://user-images.githubusercontent.com/5508707/149060364-5298974f-d1f1-4f4d-a430-7b51154b06d5.gif" alt="sample01" />
+    <img style="width: 175px;" src="https://user-images.githubusercontent.com/5508707/149060364-5298974f-d1f1-4f4d-a430-7b51154b06d5.gif" alt="sample01" />
 </p>
 
 ---
@@ -189,24 +247,11 @@ Notes:
     - `width`
     - `height`
 
-- `MerakiScript` - abstract class that's extended by the script implementation
-  - `initialize()` - called prior to execution/generation
-  - `execute()` - generates the image
-  - `configure()` - defines configuration info for the script
-
-    ```js
-    return {
-        renderDelayMs: number; //time in ms needed to render the image; optional
-        libraryName: string; //library used for rendering: p5, three, etc. required.
-        libraryVersion: string; //library version; optional
-    }
-    ```
-
 ---
 
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed between versions.
 
 ## Contributing
 
