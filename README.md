@@ -5,9 +5,11 @@
     - [Writing Scripts for Meraki](#writing-scripts-for-meraki)
       - [Creating Scripts for P5](#creating-scripts-for-p5)
       - [Random values](#random-values)
-      - [The `execute` method](#the-execute-method)
-      - [The `initialize` method](#the-initialize-method)
-      - [The `configure` method](#the-configure-method)
+      - [Required Methods](#required-methods)
+        - [`execute()`](#execute)
+        - [`initialize()`](#initialize)
+        - [`version()`](#version)
+        - [`configure()`](#configure)
     - [Animated Example Script](#animated-example-script)
   - [SDK Development](#sdk-development)
     - [Setup](#setup)
@@ -112,15 +114,27 @@ You may access the helper methods via the `Meraki.random` class, which provides 
 ```
 
 
-#### The `execute` method
+#### Required Methods
+
+##### `execute()`
 
 The `execute` method is where you place the code that renders the artwork.  It's equivalent to the `setup` function for `p5`.  If you have a `p5` script, you should extract the body of that function and place it in the `execute` method.
 
-#### The `initialize` method
+##### `initialize()`
 
 Called before execution to allow for initial setup of class properties or other values and actions to prepare for rendering.  When using the `p5` library, it calls `preload()`.
 
-#### The `configure` method
+##### `version()`
+
+You must provide a `version` method that returns a [semantic version](https://github.com/semver/semver/blob/master/semver.md) string for the current version of your script.
+
+```js
+    version() {
+        return '1.2.0';
+    }
+```
+
+##### `configure()`
 
 Every script class must have a `configure` method that returns a `MerakiScriptConfiguration` type object with the following properties:
 - `renderTimeMs`: an integer value that indicates an approximate time in milliseconds for how long the script takes to render. _optional_.

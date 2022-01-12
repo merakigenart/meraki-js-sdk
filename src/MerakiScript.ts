@@ -10,7 +10,11 @@ export abstract class MerakiScript {
     public abstract execute(): void;
     public abstract configure(): MerakiScriptConfiguration;
 
-    public draw: CallableFunction | null = null;
+    public abstract version(): string;
+
+    public draw() {
+        //
+    }
 
     public initialize() {
         //

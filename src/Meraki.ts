@@ -15,6 +15,8 @@ export class Meraki {
         tokenId: '',
     };
 
+    protected registerScriptCalled = false;
+
     protected randomObj: Random;
 
     get random() {
@@ -34,9 +36,15 @@ export class Meraki {
     }
 
     public registerScript(scriptObject: MerakiScript): MerakiScript {
+        this.registerScriptCalled = true;
+
         globalThis[config.scriptInstanceName] = scriptObject; // eslint-disable-line no-undef
 
         return scriptObject;
+    }
+
+    isScriptRegistered() {
+        return this.registerScriptCalled;
     }
 
     constructor(tokenId: string, hash: string) {
