@@ -1,8 +1,9 @@
 /* eslint-disable no-undef */
 
+import config from '@/config';
+import { murmurhash3 } from '@/lib/murmurhash3';
+import { MerakiScript } from '@/MerakiScript';
 import { Random } from '@/Random';
-import config from './config';
-import { MerakiScript } from './MerakiScript';
 
 export interface MerakiCanvasInformation {
     height: number;
@@ -28,6 +29,14 @@ export class Meraki {
         return Object.assign({}, this.tokenData);
     }
 
+    get utils() {
+        return {
+            hash: {
+                murmurhash3,
+            },
+        };
+    }
+
     get canvas() {
         return {
             height: globalThis.innerHeight,
@@ -51,6 +60,9 @@ export class Meraki {
         this.tokenData.tokenId = tokenId;
         this.tokenData.tokenHash = hash;
         this.registerScriptCalled = false;
+
+        console.log(x86.hash32('test').toString());
+
         // // @ts-ignore
         // this.randomObj = new Random(this.tokenData);
     }

@@ -2,14 +2,21 @@
 
 - [Meraki Script SDK](#meraki-script-sdk)
     - [Overview](#overview)
+    - [The `Meraki` class](#the-meraki-class)
+      - [Properties](#properties)
+        - [`canvas`](#canvas)
+      - [Methods](#methods)
+        - [`registerScript()`](#registerscript)
+      - [Utilities: Hashing](#utilities-hashing)
     - [Writing Scripts for Meraki](#writing-scripts-for-meraki)
+    - [The `Script` class](#the-script-class)
       - [Required Methods](#required-methods)
         - [`execute()`](#execute)
         - [`initialize()`](#initialize)
         - [`version()`](#version)
         - [`configure()`](#configure)
-      - [Creating Scripts for P5](#creating-scripts-for-p5)
       - [Random values](#random-values)
+    - [Creating Scripts for P5](#creating-scripts-for-p5)
     - [Animated Example Script](#animated-example-script)
   - [SDK Development](#sdk-development)
     - [Setup](#setup)
@@ -26,9 +33,42 @@
 
 THe Meraki platform requires that artists provide scripts created using a framework that we provide - this SDK.  At its core, a script is an ES2015+ class that extends a base class and implemented specific methods.
 
+### The `Meraki` class
+
+The `MerakiScript` class gets included automatically by the SDK browser bundle during rendering.
+
+#### Properties
+
+##### `canvas`
+
+The `Meraki.canvas` property provides information about the canvas you should create.  It has `width` and `height` properties:
+
+```ts
+interface MerakiCanvasInformation {
+    height: number;
+    width: number;
+}
+```
+
+#### Methods
+
+##### `registerScript()`
+
+The `Meraki.registerScript(instance)` method registers your script class to allow for automated rendering of your code.  You may call this method manually as the last line in your script, or omit it entirely (and added automatically).
+
+#### Utilities: Hashing
+
+The `Meraki` class provides a `Meraki.utils.hash` property that offers popular hashing functions:
+- `murmurhash3` - both x86 and x64 hashing functions are available
+
+```js
+console.log(Meraki.utils.hash.murmurhash3.hash32('my string'));
+```
+
+
 ### Writing Scripts for Meraki
 
-To create a script for Meraki, you must use the framework (SDK) we provide via an npm package. This allows for uniformity between scripts, regardless of what rendering library is in use. Additionally, this makes it easier to create scripts as there's a single, documented way to write a valid Meraki script.
+To create a script for Meraki, you must use the framework (SDK) we provide via an npm package. This allows for uniformity between scripts, regardless of what rendering library is in use. This makes it easier to create scripts as there's a single, documented way to write a valid Meraki script.
 
 The core of your script will be a modern ECMAScript class named `Script` that extends a `MerakiScript` class, as shown below:
 
@@ -38,7 +78,9 @@ class Script extends MerakiScript {
 }
 ```
 
-The `MerakiScript` class gets included automatically by the SDK browser bundle during rendering.
+### The `Script` class
+
+The `Script` class you create must extend the `MerakiScript` class.
 
 #### Required Methods
 
@@ -98,7 +140,32 @@ interface MerakiScriptConfiguration {
 }
 ```
 
-#### Creating Scripts for P5
+#### Random values
+
+Your script may require random values (integers, decimals, etc.), but is required to use the Meraki-provided value _(the "entropy hash")_ as the basis for all randomness.  To make it easier, the SDK provides helper methods to generate predictable random values based on the entropy hash.
+
+You may access the helper methods via the `Meraki.random` class, which provides the following methods:
+
+- `decimal()`: returns a random decimal between 0 and 1.
+- `number(min, max)`: random number; both `min` and `max` are optional integer values
+- `integer(min, max)`: random integer; both `min` and `max` are optional integer values
+- `boolean(percent)`: random boolean, where optional `percent` is the percentage chance of a `true` result
+- `element(array)`: returns a random element from the provided array
+
+```js
+    // return true approxamtely 50% of the time
+    for(let i = 0; i < 10; i++) {
+        console.log(`loop ${i + 1}: `, Meraki.random.boolean());
+    }
+
+    // return true approxamtely 10% of the time
+    for(let i = 0; i < 10; i++) {
+        console.log(`loop ${i + 1}: `, Meraki.random.boolean(10));
+    }
+```
+
+
+### Creating Scripts for P5
 
 When creating a script class to for rendering by the `p5` library, you may use the same code that you'd use when not using a framework.  The primary difference is that the code placed within `setup()` is now located in the `execute()` method in your `MerakiScript` class.
 
@@ -151,30 +218,6 @@ class Script extends MerakiScript {
 
 // You must call Meraki.registerScript() to properly setup the class instance
 Meraki.registerScript(new Script());
-```
-
-#### Random values
-
-Your script may require random values (integers, decimals, etc.), but is required to use the Meraki-provided value _(the "entropy hash")_ as the basis for all randomness.  To make it easier, the SDK provides helper methods to generate predictable random values based on the entropy hash.
-
-You may access the helper methods via the `Meraki.random` class, which provides the following methods:
-
-- `decimal()`: returns a random decimal between 0 and 1.
-- `number(min, max)`: random number; both `min` and `max` are optional integer values
-- `integer(min, max)`: random integer; both `min` and `max` are optional integer values
-- `boolean(percent)`: random boolean, where optional `percent` is the percentage chance of a `true` result
-- `element(array)`: returns a random element from the provided array
-
-```js
-    // return true approxamtely 50% of the time
-    for(let i = 0; i < 10; i++) {
-        console.log(`loop ${i + 1}: `, Meraki.random.boolean());
-    }
-
-    // return true approxamtely 10% of the time
-    for(let i = 0; i < 10; i++) {
-        console.log(`loop ${i + 1}: `, Meraki.random.boolean(10));
-    }
 ```
 
 

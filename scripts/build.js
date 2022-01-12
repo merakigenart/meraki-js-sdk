@@ -41,6 +41,7 @@ class Builder {
             entryPoints: [buildConfig.entry],
             outdir: buildConfig.outdir,
             bundle: buildConfig.bundle,
+            external: ['util'],
             format: buildConfig.format,
             platform: buildConfig.platform.name,
             target: buildConfig.target || `${buildConfig.platform.name}${buildConfig.platform.version}`,
