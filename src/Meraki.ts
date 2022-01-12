@@ -61,8 +61,6 @@ export class Meraki {
         this.tokenData.tokenHash = hash;
         this.registerScriptCalled = false;
 
-        console.log(x86.hash32('test').toString());
-
         // // @ts-ignore
         // this.randomObj = new Random(this.tokenData);
     }
