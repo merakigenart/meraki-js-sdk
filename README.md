@@ -123,13 +123,19 @@ class Script extends MerakiScript {
         textSize(14);
     }
 
-    draw = () => {
+    draw() {
+        super.draw();
         text("hello world !", 50, 250);
     }
 
     initialize() {
         //called before execution
+        super.initialize();
         this.randomFill = Meraki.random.integer(0, 200);
+    }
+
+    version() {
+        return '1.0.0';
     }
 
     configure() {
@@ -199,13 +205,18 @@ class Script extends MerakiScript {
         return new Date().getSeconds();
     }
 
-    draw = () => {
+    draw() {
+        super.draw();
         this.redraw();
     }
 
     initialize() {
         super.initialize();
         console.log('init');
+    }
+
+    version() {
+        return '1.1.0';
     }
 
     configure() {
