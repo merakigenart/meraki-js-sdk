@@ -6,7 +6,7 @@ import { Meraki } from './Meraki';
 import { MerakiScript } from './MerakiScript';
 import { generateNewSdkTemplate } from './Utilities';
 
-const merakiSdk = {
+export const merakiSdk = {
     Meraki: new Meraki(globalThis.tokenId, globalThis.tokenHash),
     MerakiScript,
     generateNewSdkTemplate,

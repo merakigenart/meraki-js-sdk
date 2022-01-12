@@ -19,3 +19,10 @@ it('generates a random decimal', () => {
 it('generates a random boolean', () => {
     expect(typeof random.boolean()).toBe('boolean');
 });
+
+it('generates random decimals', () => {
+    const decimal1 = random.decimal(123456);
+    const decimal2 = random.decimal(3456789);
+
+    expect(decimal1).not.toEqual(decimal2);
+});

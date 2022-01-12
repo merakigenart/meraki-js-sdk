@@ -5,7 +5,7 @@ export class Random {
 
     constructor(tokenData = { tokenHash: '', tokenId: '' }) {
         this.useA = false;
-        let sfc32 = class {
+        const sfc32 = class {
             handler;
             constructor(uint128Hex) {
                 let a = parseInt(uint128Hex.substr(0, 8), 16);
@@ -22,7 +22,7 @@ export class Random {
                     b |= 0;
                     c |= 0;
                     d |= 0;
-                    let t = (((a + b) | 0) + d) | 0;
+                    const t = (((a + b) | 0) + d) | 0;
                     d = (d + 1) | 0;
                     a = b ^ (b >>> 9);
                     b = (c + (c << 3)) | 0;
@@ -32,7 +32,16 @@ export class Random {
                 };
             }
         };
+
         const hashPartLength = (tokenData.tokenHash.length - 2) / 2;
+
+        // const seedStr = tokenData.tokenHash.slice(2);
+        // const seeds = [];
+
+        // for(let i = 0; i <= 64; i++) {
+        //     seeds.push(seedStr.substring(i, 4));
+        //     i += 4;
+        // }
 
         // seed prngA with first half of tokenData.hash
         this.prngA = new sfc32(tokenData.tokenHash.substring(2, hashPartLength)).handler;

@@ -17,7 +17,7 @@ export class Meraki {
 
     protected registerScriptCalled = false;
 
-    protected randomObj: Random;
+    protected randomObj!: Random;
 
     get random() {
         // @ts-ignore
