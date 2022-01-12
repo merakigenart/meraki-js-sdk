@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-nocheck
 
+import { registerScript } from './helpers';
 import { Meraki } from './Meraki';
 import { MerakiScript } from './MerakiScript';
 import { createArtworkScript } from './MerakiScript';
@@ -28,14 +29,17 @@ class Script extends MerakiScript {
         //called prior to execution
     }
 
+    version() {
+        return '0.0.1';
+    }
+
     configure() {
         return {
             renderDelayMs: 100,
-            libraryName: 'p5',
-            libraryVersion: '1.4.0',
+            library: {
+                name: 'p5',
+                version: '1.4.0',
+            },
         };
     }
 }
-
-// You must call createArtworkScript() to properly setup the class instance
-createArtworkScript(new Script());
