@@ -50,6 +50,7 @@ export class Meraki {
     constructor(tokenId: string, hash: string) {
         this.tokenData.tokenId = tokenId;
         this.tokenData.tokenHash = hash;
+        this.registerScriptCalled = false;
         // // @ts-ignore
         // this.randomObj = new Random(this.tokenData);
     }
