@@ -10,6 +10,11 @@ export interface MerakiCanvasInformation {
     width: number;
 }
 
+export interface MerakiWindowInformation {
+    height: number;
+    width: number;
+}
+
 export class Meraki {
     protected tokenData: Record<string, any> = {
         tokenHash: '',
@@ -38,6 +43,13 @@ export class Meraki {
     }
 
     get canvas() {
+        return {
+            height: globalThis.innerHeight,
+            width: globalThis.innerWidth,
+        };
+    }
+
+    get window() {
         return {
             height: globalThis.innerHeight,
             width: globalThis.innerWidth,

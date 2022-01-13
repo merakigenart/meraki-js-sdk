@@ -5,6 +5,8 @@
     - [The `Meraki` class](#the-meraki-class)
       - [Properties](#properties)
         - [`canvas`](#canvas)
+        - [`data`](#data)
+        - [`window`](#window)
       - [Methods](#methods)
         - [`registerScript()`](#registerscript)
       - [Utilities: Hashing](#utilities-hashing)
@@ -15,7 +17,7 @@
         - [`initialize()`](#initialize)
         - [`version()`](#version)
         - [`configure()`](#configure)
-      - [Random values](#random-values)
+      - [The `Random` class](#the-random-class)
     - [Creating Scripts for P5](#creating-scripts-for-p5)
     - [Animated Example Script](#animated-example-script)
   - [SDK Development](#sdk-development)
@@ -48,6 +50,36 @@ interface MerakiCanvasInformation {
     height: number;
     width: number;
 }
+```
+
+##### `data`
+
+The `Meraki.data` property provides information about the image to generate, including a random entropy hash that **must** seed all random values generators in the script.
+
+```ts
+interface MerakiTokenData {
+    tokenHash: string; // random 64-character hexadecimal value used for seeding RNGs, etc.; starts with '0x'.
+    tokenId: string; // the specific token (NFT) identifier that the script is creating.
+}
+```
+
+##### `window`
+
+The `Meraki.window` property provides information about the size of the browser window.  It has `width` and `height` properties:
+
+```ts
+interface MerakiWindowInformation {
+    height: number;
+    width: number;
+}
+```
+
+```js
+function seed_my_custom_rng(value) {
+    // do some work
+}
+
+seed_my_custom_rng(Meraki.data.tokenHash);
 ```
 
 #### Methods
@@ -140,17 +172,19 @@ interface MerakiScriptConfiguration {
 }
 ```
 
-#### Random values
+#### The `Random` class
 
 Your script may require random values (integers, decimals, etc.), but is required to use the Meraki-provided value _(the "entropy hash")_ as the basis for all randomness.  To make it easier, the SDK provides helper methods to generate predictable random values based on the entropy hash.
 
 You may access the helper methods via the `Meraki.random` class, which provides the following methods:
 
-- `decimal()`: returns a random decimal between 0 and 1.
-- `number(min, max)`: random number; both `min` and `max` are optional integer values
-- `integer(min, max)`: random integer; both `min` and `max` are optional integer values
 - `boolean(percent)`: random boolean, where optional `percent` is the percentage chance of a `true` result
+- `decimal()`: returns a random decimal between 0 and 1.
 - `element(array)`: returns a random element from the provided array
+- `generateSeeds()`: returns an array of unsigned integers derived from the entropy hash, each between 4 and 5 digits long
+- `integer(min, max)`: random integer; both `min` and `max` are optional integer values
+- `number(min, max)`: random number; both `min` and `max` are optional integer values
+
 
 ```js
     // return true approxamtely 50% of the time
@@ -310,9 +344,6 @@ Notes:
   - `data`
     - `tokenId` - token id
     - `hash` - platform-provided random value
-  - `canvas` - canvas size to use when generating the image, determined by browser/window size
-    - `width`
-    - `height`
 
 ---
 

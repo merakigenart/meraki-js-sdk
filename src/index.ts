@@ -27,10 +27,6 @@ function setup() {
     globalThis.tokenScript.render();
 }
 
-//module.exports = merakiSdk;
-
-// //called prior to execution
-
 // const DEFAULT_SIZE = 1000
 // const WIDTH = globalThis.innerWidth
 // const HEIGHT = globalThis.innerHeight

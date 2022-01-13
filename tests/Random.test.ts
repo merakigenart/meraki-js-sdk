@@ -5,7 +5,7 @@ import { Random } from '@/Random';
 let random: Random;
 
 beforeEach(() => {
-    random = new Random({ tokenId: '123', tokenHash: '123' });
+    random = new Random({ tokenId: '123', tokenHash: '940cca72744643225ef08d17711cb873940cca72744643225ef08d17711cb873' });
 });
 
 it('generates a random integer', () => {
@@ -21,8 +21,17 @@ it('generates a random boolean', () => {
 });
 
 it('generates random decimals', () => {
-    const decimal1 = random.decimal(123456);
-    const decimal2 = random.decimal(3456789);
+    const decimal1 = random.decimal();
+    const decimal2 = random.decimal();
+
+    console.log(decimal1, decimal2);
 
     expect(decimal1).not.toEqual(decimal2);
+});
+
+it('generates predictable seeds based on a provided value', () => {
+    expect(random.generateSeeds('940cca72744643225ef08d17711cb873')).toMatchSnapshot();
+    expect(random.generateSeeds('0x940cca72744643225ef08d17711cb873')).toMatchSnapshot();
+    expect(random.generateSeeds('0x67a03e8e37010be33328144dc723c6b7')).toMatchSnapshot();
+    expect(random.generateSeeds('0x1234567890')).toMatchSnapshot();
 });
