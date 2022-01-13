@@ -23,3 +23,23 @@ export const generateRandomTokenData = (projectNum: number) => {
 
     return data;
 };
+
+/**
+ * Separates string into chunks of the same size
+ *
+ * @param {string} str - string to separate into chunks
+ * @param {int} size - number of characters wanted in each chunk
+ * @return {array} - array of original string split into chunks
+ *
+ * @example
+ *      chunkify("this is a test", 2)
+ */
+export function chunkify(str: string, size: number): string[] {
+    const chunks: string[] = [];
+
+    for (let i = 0; i < str.length; i += size) {
+        chunks.push(str.slice(i, i + size));
+    }
+
+    return chunks;
+}

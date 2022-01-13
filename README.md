@@ -1,22 +1,27 @@
 # Meraki Script SDK
 
 - [Meraki Script SDK](#meraki-script-sdk)
-    - [Overview](#overview)
+  - [Overview](#overview)
+    - [Writing Scripts for Meraki](#writing-scripts-for-meraki)
+    - [Submitting your work](#submitting-your-work)
+  - [SDK Overview](#sdk-overview)
     - [The `Meraki` class](#the-meraki-class)
       - [Properties](#properties)
         - [`canvas`](#canvas)
         - [`data`](#data)
+        - [`utils`](#utils)
+          - [`hash`](#hash)
         - [`window`](#window)
       - [Methods](#methods)
         - [`registerScript()`](#registerscript)
       - [Utilities: Hashing](#utilities-hashing)
-    - [Writing Scripts for Meraki](#writing-scripts-for-meraki)
     - [The `Script` class](#the-script-class)
       - [Required Methods](#required-methods)
         - [`execute()`](#execute)
         - [`initialize()`](#initialize)
         - [`version()`](#version)
         - [`configure()`](#configure)
+    - [Script Traits](#script-traits)
       - [The `Random` class](#the-random-class)
     - [Creating Scripts for P5](#creating-scripts-for-p5)
     - [Animated Example Script](#animated-example-script)
@@ -31,9 +36,33 @@
 
 ---
 
-### Overview
+## Overview
 
 THe Meraki platform requires that artists provide scripts created using a framework that we provide - this SDK.  At its core, a script is an ES2015+ class that extends a base class and implemented specific methods.
+
+### Writing Scripts for Meraki
+
+To create a script for Meraki, you must use the framework (SDK) we provide via an npm package. This allows for uniformity between scripts, regardless of what rendering library is in use. This makes it easier to create scripts as there's a single, documented way to write a valid Meraki script.
+
+The core of your script will be a modern ECMAScript class named `Script` that extends a `MerakiScript` class, as shown below:
+
+```js
+class Script extends MerakiScript {
+    //
+}
+```
+
+See below for more information on creating the `Script` class implementation.
+
+### Submitting your work
+
+The package you submit for review should contain a `Script.js` file that exports a [`Script`](#the-script-class) class, and a `ScriptTraits.js` file that exports a [`ScriptTraits`](#script-traits) class.  Both files should use named exports (ESM).
+
+**Do not submit minified or transpiled/compiled scripts.**
+
+Please see the [Artist Application](https://mraki.io/application) on [mraki.io](https://mraki.io) for more information about applying.
+
+## SDK Overview
 
 ### The `Meraki` class
 
@@ -61,6 +90,21 @@ interface MerakiTokenData {
     tokenHash: string; // random 64-character hexadecimal value used for seeding RNGs, etc.; starts with '0x'.
     tokenId: string; // the specific token (NFT) identifier that the script is creating.
 }
+```
+
+##### `utils`
+
+This `Meraki.utils` property provides access to common helper functions that you may choose to use when writing your script.
+
+###### `hash`
+
+The `hash` property provides common hash functions:
+
+- `murmurhash3`
+- `sha256()`
+
+```js
+const hash = Meraki.utils.hash.sha256('my string');
 ```
 
 ##### `window`
@@ -97,22 +141,10 @@ The `Meraki` class provides a `Meraki.utils.hash` property that offers popular h
 console.log(Meraki.utils.hash.murmurhash3.hash32('my string'));
 ```
 
-
-### Writing Scripts for Meraki
-
-To create a script for Meraki, you must use the framework (SDK) we provide via an npm package. This allows for uniformity between scripts, regardless of what rendering library is in use. This makes it easier to create scripts as there's a single, documented way to write a valid Meraki script.
-
-The core of your script will be a modern ECMAScript class named `Script` that extends a `MerakiScript` class, as shown below:
-
-```js
-class Script extends MerakiScript {
-    //
-}
-```
-
 ### The `Script` class
 
 The `Script` class you create must extend the `MerakiScript` class.
+
 
 #### Required Methods
 
@@ -169,6 +201,40 @@ interface MerakiScriptConfiguration {
         name?: string;
         version?: string;
     };
+}
+```
+
+### Script Traits
+
+Your script must define all possible trait names and values that may exist within a generated image.  This should be defined as a separate class named `ScriptTraits` that extends the abstract class `MerakiScriptTraits`.  Each feature name should be a method, should be **singluar** and not plural, and its return value should always be an array of all possible values for that feature.
+
+The package you submit for review should contain a `ScriptTraits.js` file that exports a `ScriptTraits` class as a named export (ESM).
+
+For example:
+
+```js
+import { MerakiScriptTraits } from 'meraki-js-sdk';
+
+export class ScriptTraits extends MerakiScriptTraits {
+    color() {
+        return ['red', 'blue', 'green', 'purple'];
+    }
+
+    size() {
+        return ['small', 'medium', 'large'];
+    }
+
+    form() {
+        return ['circle', 'hard', 'soft'];
+    }
+
+    speed() {
+        return ['conceptual', 'meditative'];
+    }
+
+    palette() {
+        return ['darkness', 'laguna', 'light', 'oracle', 'phoenix', 'sands'];
+    }
 }
 ```
 
@@ -336,17 +402,6 @@ This process will create a file named `sdk.js` in the `dist` directory.  This is
 ```bash
 npm run test
 ```
-
----
-
-Notes:
-
-- `Meraki`
-  - `data`
-    - `tokenId` - token id
-    - `hash` - platform-provided random value
-
----
 
 ## Changelog
 

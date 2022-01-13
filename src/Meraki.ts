@@ -2,6 +2,7 @@
 
 import config from '@/config';
 import { murmurhash3 } from '@/lib/murmurhash3';
+import { sha256 } from '@/lib/sha256';
 import { MerakiScript } from '@/MerakiScript';
 import { Random } from '@/Random';
 
@@ -38,6 +39,7 @@ export class Meraki {
         return {
             hash: {
                 murmurhash3,
+                sha256,
             },
         };
     }
