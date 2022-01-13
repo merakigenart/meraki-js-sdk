@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // @ts-nocheck
 
 //import { generateRandomTokenData } from './helpers';
@@ -39,8 +40,7 @@ export class Random {
                 };
             }
         };
-
-        const hashPartLength = (tokenData.tokenHash.length - 2) / 2;
+        // const hashPartLength = (tokenData.tokenHash.length - 2) / 2;
 
         // const seedStr = tokenData.tokenHash.slice(2);
         // const seeds = [];
@@ -50,20 +50,24 @@ export class Random {
         //     i += 4;
         // }
 
-        // seed prngA with first half of tokenData.hash
-        this.prngA = new sfc32(tokenData.tokenHash.substring(2, hashPartLength)).handler;
-        // seed prngB with second half of tokenData.hash
-        this.prngB = new sfc32(tokenData.tokenHash.substring(hashPartLength + 2, hashPartLength)).handler;
+        // // seed prngA with first half of tokenData.hash
+        // this.prngA = new sfc32(tokenData.tokenHash.substring(2, hashPartLength)).handler;
+        // // seed prngB with second half of tokenData.hash
+        // this.prngB = new sfc32(tokenData.tokenHash.substring(hashPartLength + 2, hashPartLength)).handler;
 
-        for (let i = 0; i < 1e6; i += 2) {
-            this.prngA();
-            this.prngB();
+        // for (let i = 0; i < 1e6; i += 2) {
+        //     this.prngA();
+        //     this.prngB();
+        // }
+
+        if (this.tokenData.tokenHash === '') {
+            this.tokenData.tokenHash = '0x940cca72744643225ef08d17711cb873940cca72744643225ef08d17711cb873';
         }
 
-        //this.tokenData.tokenHash = generateRandomTokenData(2).tokenHash;
+        const seeds = this.generateSeeds(this.tokenData.tokenHash);
 
         this.state = this.initializeState().state;
-        this.seedValues = this.initializeSeeds(this.generateSeeds(this.tokenData.tokenHash));
+        this.seedValues = this.initializeSeeds(seeds);
         this.rnd();
     }
 
@@ -149,17 +153,20 @@ export class Random {
     }
 
     protected initializeSeeds(seeds: number[]) {
-        const seedValues = {
-            eps: Math.pow(2, -32),
-            m0: seeds.shift(),
-            m1: seeds.shift(),
-            m2: seeds.shift(),
-            m3: seeds.shift(),
-            a0: seeds.shift(),
-            a1: seeds.shift(),
-            a2: seeds.shift(),
-            a3: seeds.shift(),
-        };
+        const seedValues = Object.assign(
+            {},
+            {
+                eps: Math.pow(2, -32),
+                m0: seeds[0],
+                m1: seeds[1],
+                m2: seeds[2],
+                m3: seeds[3],
+                a0: seeds[4],
+                a1: seeds[5],
+                a2: seeds[6],
+                a3: seeds[7],
+            },
+        );
 
         return seedValues;
     }
@@ -203,5 +210,22 @@ export class Random {
         const i = (e << 21) + (((e >> 2) ^ c) << 5) + (((c >> 2) ^ b) >> 11);
 
         return eps * (((i >>> (e >> 11)) | (i << (31 & -(e >> 11)))) >>> 0);
+    }
+
+    shuffle(a: any[]) {
+        const f = [...a];
+        let b,
+            c,
+            e = a.length;
+
+        for (let i = 0; i < e; i++) {
+            b = ~~(this.rnd() * e - 1);
+            c = f[e];
+            f[e] = f[b];
+            f[b] = c;
+            e--;
+        }
+
+        return f;
     }
 }

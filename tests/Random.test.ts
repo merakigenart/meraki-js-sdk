@@ -5,7 +5,7 @@ import { Random } from '@/Random';
 let random: Random;
 
 beforeEach(() => {
-    random = new Random({ tokenId: '123', tokenHash: '940cca72744643225ef08d17711cb873940cca72744643225ef08d17711cb873' });
+    random = new Random({ tokenId: '123', tokenHash: '0x940cca72744643225ef08d17711cb873940cca72744643225ef08d17711cb873' });
 });
 
 it('generates a random integer', () => {
@@ -23,8 +23,6 @@ it('generates a random boolean', () => {
 it('generates random decimals', () => {
     const decimal1 = random.decimal();
     const decimal2 = random.decimal();
-
-    console.log(decimal1, decimal2);
 
     expect(decimal1).not.toEqual(decimal2);
 });

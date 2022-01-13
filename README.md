@@ -184,6 +184,7 @@ You may access the helper methods via the `Meraki.random` class, which provides 
 - `generateSeeds()`: returns an array of unsigned integers derived from the entropy hash, each between 4 and 5 digits long
 - `integer(min, max)`: random integer; both `min` and `max` are optional integer values
 - `number(min, max)`: random number; both `min` and `max` are optional integer values
+- `shuffle(array)`: shuffle the items of an array
 
 
 ```js
