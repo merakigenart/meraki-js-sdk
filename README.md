@@ -52,10 +52,13 @@ class Script extends MerakiScript {
 }
 ```
 
+See [below](#the-script-class) for more information on creating the `Script` class implementation.
+
 ### Creating A Project
 
-The easiest way to get started is to use our [starter template](https://github.com/merakigenart/script-starter-template).
+The easiest way to get started is to use our [starter template](https://github.com/merakigenart/script-starter-template).  Click the "Use This Template" button to generate a new GitHub repository based on the template.
 
+![image](https://user-images.githubusercontent.com/5508707/149585559-3145fa58-7b75-455c-a8d6-d8afc28645b3.png)
 
 Or install the sdk into your existing project:
 
@@ -63,7 +66,6 @@ Or install the sdk into your existing project:
 npm install meraki-js-sdk
 ```
 
-See below for more information on creating the `Script` class implementation.
 
 ### Submitting your work
 
