@@ -34,6 +34,20 @@ const buildConfigs = [
             version: 74,
         },
     },
+    {
+        basePath: `${__dirname}/..`,
+        outdir: 'dist',
+        format: 'cjs',
+        entry: 'src/sdk-dev.js',
+        bundle: true,
+        minify: false,
+        constants: {},
+        target: 'es2020',
+        platform: {
+            name: 'browser',
+            version: 74,
+        },
+    },
 ];
 
 class Builder {

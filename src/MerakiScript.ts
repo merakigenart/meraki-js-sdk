@@ -1,4 +1,5 @@
 export interface MerakiScriptConfiguration {
+    sdkVersion?: string;
     renderTimeMs?: number;
     library?: {
         name?: string;

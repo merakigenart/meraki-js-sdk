@@ -3,6 +3,7 @@
 - [Meraki Script SDK](#meraki-script-sdk)
   - [Overview](#overview)
     - [Writing Scripts for Meraki](#writing-scripts-for-meraki)
+    - [Creating A Project](#creating-a-project)
     - [Submitting your work](#submitting-your-work)
   - [SDK Overview](#sdk-overview)
     - [The `Meraki` class](#the-meraki-class)
@@ -11,6 +12,7 @@
         - [`data`](#data)
         - [`utils`](#utils)
           - [`hash`](#hash)
+        - [`random`](#random)
         - [`window`](#window)
       - [Methods](#methods)
         - [`registerScript()`](#registerscript)
@@ -20,7 +22,6 @@
         - [`initialize()`](#initialize)
         - [`version()`](#version)
         - [`configure()`](#configure)
-    - [The `Random` class](#the-random-class)
     - [Script Traits](#script-traits)
     - [Creating Scripts for P5](#creating-scripts-for-p5)
     - [Animated Example Script](#animated-example-script)
@@ -51,6 +52,17 @@ class Script extends MerakiScript {
 }
 ```
 
+### Creating A Project
+
+The easiest way to get started is to use our [starter template](https://github.com/merakigenart/script-starter-template).
+
+
+Or install the sdk into your existing project:
+
+```bash
+npm install meraki-js-sdk
+```
+
 See below for more information on creating the `Script` class implementation.
 
 ### Submitting your work
@@ -64,8 +76,6 @@ Please see the [Artist Application](https://mraki.io/application) on [mraki.io](
 ## SDK Overview
 
 ### The `Meraki` class
-
-The `MerakiScript` class gets included automatically by the SDK browser bundle during rendering.
 
 #### Properties
 
@@ -118,6 +128,35 @@ const hash1 = Meraki.utils.hash.sha256('my string');
 const hash2 = Meraki.utils.hash.murmurhash3.hash32('my string');
 ```
 
+##### `random`
+
+The `Meraki.random` property provides access to random value generation functions using a `Random` class.
+
+Your script may require random values (integers, decimals, etc.), but you're required to use the Meraki-provided value _(the "entropy hash")_ as the basis for all randomness.  To make it easier, the SDK provides helper methods to generate predictable random values based on the entropy hash.
+
+You may access the helper methods via the `Meraki.random` class, which provides the following methods:
+
+- `boolean(percent)`: random boolean, where optional `percent` is the percentage chance of a `true` result
+- `decimal()`: returns a random decimal between 0 and 1.
+- `element(array)`: returns a random element from the provided array
+- `generateSeeds()`: returns an array of unsigned integers derived from the entropy hash, each between 4 and 5 digits long
+- `integer(min, max)`: random integer; both `min` and `max` are optional integer values
+- `number(min, max)`: random number; both `min` and `max` are optional integer values
+- `shuffle(array)`: shuffle the items of an array
+
+
+```js
+    // return true approxamtely 50% of the time
+    for(let i = 0; i < 10; i++) {
+        console.log(`loop ${i + 1}: `, Meraki.random.boolean());
+    }
+
+    // return true approxamtely 10% of the time
+    for(let i = 0; i < 10; i++) {
+        console.log(`loop ${i + 1}: `, Meraki.random.boolean(10));
+    }
+```
+
 
 
 ##### `window`
@@ -165,12 +204,15 @@ You must provide a `version` method that returns a [semantic version](https://gi
 ##### `configure()`
 
 Every script class must have a `configure` method that returns a `MerakiScriptConfiguration` type object with the following properties:
+
+- `sdkVersion`: a string containing the SDK version used when developing your script.  Valid values include '2', '2.0', '2.0.1', etc. _optional_.
 - `renderTimeMs`: an integer value that indicates an approximate time in milliseconds for how long the script takes to render. _optional_.
 - `library`: returns an object with `name` and `version` properties that specify the name and desired version of the rendering library to use. _optional_.
 
 ```js
     configure() {
         return {
+            sdkVersion: '2.0',
             renderTimeMs: 100,
             library: {
                 name: 'p5',
@@ -198,33 +240,6 @@ interface MerakiScriptConfiguration {
         version?: string;
     };
 }
-```
-
-### The `Random` class
-
-Your script may require random values (integers, decimals, etc.), but is required to use the Meraki-provided value _(the "entropy hash")_ as the basis for all randomness.  To make it easier, the SDK provides helper methods to generate predictable random values based on the entropy hash.
-
-You may access the helper methods via the `Meraki.random` class, which provides the following methods:
-
-- `boolean(percent)`: random boolean, where optional `percent` is the percentage chance of a `true` result
-- `decimal()`: returns a random decimal between 0 and 1.
-- `element(array)`: returns a random element from the provided array
-- `generateSeeds()`: returns an array of unsigned integers derived from the entropy hash, each between 4 and 5 digits long
-- `integer(min, max)`: random integer; both `min` and `max` are optional integer values
-- `number(min, max)`: random number; both `min` and `max` are optional integer values
-- `shuffle(array)`: shuffle the items of an array
-
-
-```js
-    // return true approxamtely 50% of the time
-    for(let i = 0; i < 10; i++) {
-        console.log(`loop ${i + 1}: `, Meraki.random.boolean());
-    }
-
-    // return true approxamtely 10% of the time
-    for(let i = 0; i < 10; i++) {
-        console.log(`loop ${i + 1}: `, Meraki.random.boolean(10));
-    }
 ```
 
 ### Script Traits
@@ -267,6 +282,7 @@ When creating a script class to for rendering by the `p5` library, you may use t
 
 If you have a `draw()` function defined, you should instead add a `draw()` method to your script class and place the code there.
 
+_Note: The `MerakiScript` class gets included automatically by the SDK browser bundle during rendering._
 
 ```js
 // Sample script implementation using p5.js
