@@ -5,20 +5,36 @@ const esbuild = require('esbuild');
 const { basename } = require('path');
 const { spawnSync } = require('child_process');
 
-const buildConfig = {
-    basePath: `${__dirname}/..`,
-    outdir: 'dist',
-    format: 'esm',
-    entry: 'src/index.ts',
-    bundle: true,
-    minify: false,
-    constants: {},
-    target: 'es2017',
-    platform: {
-        name: 'browser',
-        version: 74,
+const buildConfigs = [
+    {
+        basePath: `${__dirname}/..`,
+        outdir: 'dist',
+        format: 'esm',
+        entry: 'src/index.ts',
+        bundle: true,
+        minify: false,
+        constants: {},
+        target: 'es2020',
+        platform: {
+            name: 'browser',
+            version: 74,
+        },
     },
-};
+    {
+        basePath: `${__dirname}/..`,
+        outdir: 'dist',
+        format: 'esm',
+        entry: 'src/sdk.js',
+        bundle: true,
+        minify: false,
+        constants: {},
+        target: 'es2020',
+        platform: {
+            name: 'browser',
+            version: 74,
+        },
+    },
+];
 
 class Builder {
     config = {
@@ -35,40 +51,50 @@ class Builder {
     }
 
     async compile() {
-        const result = await esbuild.build({
-            logLevel: 'silent',
-            absWorkingDir: buildConfig.basePath,
-            entryPoints: [buildConfig.entry],
-            outdir: buildConfig.outdir,
-            bundle: buildConfig.bundle,
-            external: ['util'],
-            format: buildConfig.format,
-            platform: buildConfig.platform.name,
-            target: buildConfig.target || `${buildConfig.platform.name}${buildConfig.platform.version}`,
-            allowOverwrite: true,
-            minify: buildConfig.minify,
-            metafile: true,
-            define: {
-                __APP_VERSION__: `'${require(realpathSync(`${buildConfig.basePath}/package.json`, { encoding: 'utf-8' })).version}'`,
-                __COMPILED_AT__: `'${new Date().toUTCString()}'`,
-                ...buildConfig.constants,
-            },
-        });
+        const results = [];
 
-        return new Promise(resolve => resolve(result));
+        for (let buildConfig of buildConfigs) {
+            const result = await esbuild.build({
+                logLevel: 'silent',
+                absWorkingDir: buildConfig.basePath,
+                entryPoints: [buildConfig.entry],
+                outdir: buildConfig.outdir,
+                bundle: buildConfig.bundle,
+                external: ['util'],
+                format: buildConfig.format,
+                platform: buildConfig.platform.name,
+                target: buildConfig.target || `${buildConfig.platform.name}${buildConfig.platform.version}`,
+                allowOverwrite: true,
+                minify: buildConfig.minify,
+                metafile: true,
+                define: {
+                    __APP_VERSION__: `'${require(realpathSync(`${buildConfig.basePath}/package.json`, { encoding: 'utf-8' })).version}'`,
+                    __COMPILED_AT__: `'${new Date().toUTCString()}'`,
+                    ...buildConfig.constants,
+                },
+            });
+
+            results.push(result);
+        }
+
+        return new Promise(resolve => resolve(results));
     }
 
     sizeForDisplay(bytes) {
         return `${bytes / 1024}`.slice(0, 4) + ' kb';
     }
 
-    reportCompileResults(results) {
+    reportCompileResult(results) {
         results.errors.forEach(errorMsg => this.writeln(`* Error: ${errorMsg}`));
         results.warnings.forEach(msg => this.writeln(`* Warning: ${msg}`));
 
         Object.keys(results.metafile.outputs).forEach(fn => {
             this.writeln(`*   » created '${fn}' (${this.sizeForDisplay(results.metafile.outputs[fn].bytes)})`);
         });
+    }
+
+    reportCompileResults(results) {
+        results.forEach(result => this.reportCompileResult(result));
     }
 
     processArgv() {
@@ -90,17 +116,17 @@ class Builder {
             .forEach(data => (this.config[data.name] = data.value));
     }
 
-    convertToProductionFile() {
-        const filename = basename(buildConfig.entry).replace(/\.ts$/, '.js');
-        const newFilename = require(realpathSync(`${buildConfig.basePath}/package.json`, { encoding: 'utf-8' })).name;
+    // convertToProductionFile() {
+    //     const filename = basename(buildConfig.entry).replace(/\.ts$/, '.js');
+    //     const newFilename = require(realpathSync(`${buildConfig.basePath}/package.json`, { encoding: 'utf-8' })).name;
 
-        spawnSync('chmod', ['+x', `${buildConfig.outdir}/${filename}`], { stdio: 'ignore' });
+    //     spawnSync('chmod', ['+x', `${buildConfig.outdir}/${filename}`], { stdio: 'ignore' });
 
-        const contents = readFileSync(`${buildConfig.outdir}/${filename}`, { encoding: 'utf-8' });
+    //     const contents = readFileSync(`${buildConfig.outdir}/${filename}`, { encoding: 'utf-8' });
 
-        writeFileSync(`${buildConfig.outdir}/${filename}`, `#!/usr/bin/node\n\n${contents}`, { encoding: 'utf-8' });
-        renameSync(`${buildConfig.outdir}/${filename}`, `${buildConfig.outdir}/${newFilename}`);
-    }
+    //     writeFileSync(`${buildConfig.outdir}/${filename}`, `#!/usr/bin/node\n\n${contents}`, { encoding: 'utf-8' });
+    //     renameSync(`${buildConfig.outdir}/${filename}`, `${buildConfig.outdir}/${newFilename}`);
+    // }
 
     async run() {
         this.processArgv();
@@ -121,13 +147,13 @@ class Builder {
 
         this.writeln((this.config.verbose ? `* D` : `d`) + `one. (${finishedTs - startedTs} ms)`);
 
-        if (this.config.production) {
-            this.convertToProductionFile();
-        }
+        // if (this.config.production) {
+        //     this.convertToProductionFile();
+        // }
 
-        if (existsSync('dist/index.js')) {
-            copyFileSync(`./dist/index.js`, `./dist/sdk.js`);
-        }
+        // if (existsSync('dist/index.js')) {
+        //     copyFileSync(`./dist/index.js`, `./dist/sdk.js`);
+        // }
     }
 }
 

@@ -14,15 +14,14 @@
         - [`window`](#window)
       - [Methods](#methods)
         - [`registerScript()`](#registerscript)
-      - [Utilities: Hashing](#utilities-hashing)
     - [The `Script` class](#the-script-class)
       - [Required Methods](#required-methods)
         - [`execute()`](#execute)
         - [`initialize()`](#initialize)
         - [`version()`](#version)
         - [`configure()`](#configure)
+    - [The `Random` class](#the-random-class)
     - [Script Traits](#script-traits)
-      - [The `Random` class](#the-random-class)
     - [Creating Scripts for P5](#creating-scripts-for-p5)
     - [Animated Example Script](#animated-example-script)
   - [SDK Development](#sdk-development)
@@ -92,20 +91,34 @@ interface MerakiTokenData {
 }
 ```
 
+Seed your RNG functions with the `tokenHash`:
+
+```js
+function my_custom_rng(value) {
+    // do some work
+}
+
+my_custom_rng(Meraki.data.tokenHash);
+```
+
 ##### `utils`
 
 This `Meraki.utils` property provides access to common helper functions that you may choose to use when writing your script.
 
 ###### `hash`
 
-The `hash` property provides common hash functions:
+The `Meraki.utils.hash` property provides common hash functions:
 
-- `murmurhash3`
+- `murmurhash3.hash32()`
+- `murmurhash3.hash128()`
 - `sha256()`
 
 ```js
-const hash = Meraki.utils.hash.sha256('my string');
+const hash1 = Meraki.utils.hash.sha256('my string');
+const hash2 = Meraki.utils.hash.murmurhash3.hash32('my string');
 ```
+
+
 
 ##### `window`
 
@@ -118,28 +131,11 @@ interface MerakiWindowInformation {
 }
 ```
 
-```js
-function seed_my_custom_rng(value) {
-    // do some work
-}
-
-seed_my_custom_rng(Meraki.data.tokenHash);
-```
-
 #### Methods
 
 ##### `registerScript()`
 
 The `Meraki.registerScript(instance)` method registers your script class to allow for automated rendering of your code.  You may call this method manually as the last line in your script, or omit it entirely (and added automatically).
-
-#### Utilities: Hashing
-
-The `Meraki` class provides a `Meraki.utils.hash` property that offers popular hashing functions:
-- `murmurhash3` - both x86 and x64 hashing functions are available
-
-```js
-console.log(Meraki.utils.hash.murmurhash3.hash32('my string'));
-```
 
 ### The `Script` class
 
@@ -204,41 +200,7 @@ interface MerakiScriptConfiguration {
 }
 ```
 
-### Script Traits
-
-Your script must define all possible trait names and values that may exist within a generated image.  This should be defined as a separate class named `ScriptTraits` that extends the abstract class `MerakiScriptTraits`.  Each feature name should be a method, should be **singluar** and not plural, and its return value should always be an array of all possible values for that feature.
-
-The package you submit for review should contain a `ScriptTraits.js` file that exports a `ScriptTraits` class as a named export (ESM).
-
-For example:
-
-```js
-import { MerakiScriptTraits } from 'meraki-js-sdk';
-
-export class ScriptTraits extends MerakiScriptTraits {
-    color() {
-        return ['red', 'blue', 'green', 'purple'];
-    }
-
-    size() {
-        return ['small', 'medium', 'large'];
-    }
-
-    form() {
-        return ['circle', 'hard', 'soft'];
-    }
-
-    speed() {
-        return ['conceptual', 'meditative'];
-    }
-
-    palette() {
-        return ['darkness', 'laguna', 'light', 'oracle', 'phoenix', 'sands'];
-    }
-}
-```
-
-#### The `Random` class
+### The `Random` class
 
 Your script may require random values (integers, decimals, etc.), but is required to use the Meraki-provided value _(the "entropy hash")_ as the basis for all randomness.  To make it easier, the SDK provides helper methods to generate predictable random values based on the entropy hash.
 
@@ -265,6 +227,39 @@ You may access the helper methods via the `Meraki.random` class, which provides 
     }
 ```
 
+### Script Traits
+
+Your script must define all possible trait names and values that may exist within a generated image.  This should be defined as a separate class named `ScriptTraits` that extends the abstract class `MerakiScriptTraits`.  Each feature name should be a method, should be **singluar** and not plural, and its return value should always be an array of all possible values for that feature.
+
+The package you submit for review should contain a `ScriptTraits.js` file that exports a `ScriptTraits` class as a named export (ESM).
+
+For example:
+
+```js
+import { MerakiScriptTraits } from 'meraki-js-sdk/sdk';
+
+export class ScriptTraits extends MerakiScriptTraits {
+    color() {
+        return ['red', 'blue', 'green', 'purple'];
+    }
+
+    size() {
+        return ['small', 'medium', 'large'];
+    }
+
+    form() {
+        return ['circle', 'hard', 'soft'];
+    }
+
+    speed() {
+        return ['conceptual', 'meditative'];
+    }
+
+    palette() {
+        return ['darkness', 'laguna', 'light', 'oracle', 'phoenix', 'sands'];
+    }
+}
+```
 
 ### Creating Scripts for P5
 
@@ -275,6 +270,8 @@ If you have a `draw()` function defined, you should instead add a `draw()` metho
 
 ```js
 // Sample script implementation using p5.js
+
+import { MerakiScript } from 'meraki-js-sdk/sdk';
 
 class Script extends MerakiScript {
     randomFill = 0;
@@ -316,15 +313,14 @@ class Script extends MerakiScript {
         }
     }
 }
-
-// You must call Meraki.registerScript() to properly setup the class instance
-Meraki.registerScript(new Script());
 ```
 
 
 ### Animated Example Script
 
 ```js
+import { MerakiScript } from 'meraki-js-sdk/sdk';
+
 class Script extends MerakiScript {
     randomFill = 0;
 
@@ -369,9 +365,6 @@ class Script extends MerakiScript {
         }
     }
 }
-
-// You must call createArtworkScript() to properly setup the class instance
-registerScript(new Script());
 ```
 
 The resulting animated image renders in the browser:
