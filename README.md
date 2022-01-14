@@ -22,7 +22,9 @@
         - [`initialize()`](#initialize)
         - [`version()`](#version)
         - [`configure()`](#configure)
-    - [Script Traits](#script-traits)
+      - [Optional Methods](#optional-methods)
+        - [`draw()`](#draw)
+    - [The `ScriptTraits` class](#the-scripttraits-class)
     - [Creating Scripts for P5](#creating-scripts-for-p5)
     - [Animated Example Script](#animated-example-script)
   - [SDK Development](#sdk-development)
@@ -42,7 +44,7 @@ THe Meraki platform requires that artists provide scripts created using a framew
 
 ### Writing Scripts for Meraki
 
-To create a script for Meraki, you must use the framework (SDK) we provide via an npm package. This allows for uniformity between scripts, regardless of what rendering library is in use. This makes it easier to create scripts as there's a single, documented way to write a valid Meraki script.
+To create a script for Meraki, you must use the framework (SDK) we provide as an npm package. This allows for uniformity between scripts, regardless of what rendering library is in use. This makes it easier to create scripts as there's a single, documented way to write a valid Meraki script.
 
 The core of your script will be a modern ECMAScript class named `Script` that extends a `MerakiScript` class, as shown below:
 
@@ -244,7 +246,15 @@ interface MerakiScriptConfiguration {
 }
 ```
 
-### Script Traits
+#### Optional Methods
+
+##### `draw()`
+
+The `draw` method is where you place code that renders the artwork in a loop _(i.e., for animated images)_.  This is only relevant when using the `p5` rendering library.  This method is optional.
+
+### The `ScriptTraits` class
+
+The `ScriptTraits` class you create must extend the `MerakiScriptTraits` class.
 
 Your script must define all possible trait names and values that may exist within a generated image.  This should be defined as a separate class named `ScriptTraits` that extends the abstract class `MerakiScriptTraits`.  Each feature name should be a method, should be **singluar** and not plural, and its return value should always be an array of all possible values for that feature.
 
