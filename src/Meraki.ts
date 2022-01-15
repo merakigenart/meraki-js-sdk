@@ -5,21 +5,26 @@ import { murmurhash3 } from '@/lib/murmurhash3';
 import { sha256 } from '@/lib/sha256';
 import { MerakiScript } from '@/MerakiScript';
 import { Random } from '@/Random';
+import { chunkify } from '@/helpers';
 
-export interface MerakiCanvasInformation {
+export interface Dimensions {
     height: number;
     width: number;
 }
 
-export interface MerakiWindowInformation {
-    height: number;
-    width: number;
+export interface MerakiTokenData {
+    tokenHash: string;
+    tokenId: string;
+    mintedAt: number | string;
 }
+
+const win: Record<any, any> = window || globalThis || {};
 
 export class Meraki {
-    protected tokenData: Record<string, any> = {
+    protected tokenData: MerakiTokenData = {
         tokenHash: '',
         tokenId: '',
+        mintedAt: 0,
     };
 
     protected registerScriptCalled = false;
@@ -27,8 +32,7 @@ export class Meraki {
     protected randomObj!: Random;
 
     get random() {
-        // @ts-ignore
-        return new Random(this.tokenData);
+        return this.randomObj;
     }
 
     get data() {
@@ -41,20 +45,21 @@ export class Meraki {
                 murmurhash3,
                 sha256,
             },
+            chunkify,
         };
     }
 
-    get canvas() {
+    get canvas(): Dimensions {
         return {
-            height: globalThis.innerHeight,
-            width: globalThis.innerWidth,
+            height: win.innerHeight,
+            width: win.innerWidth,
         };
     }
 
-    get window() {
+    get window(): Dimensions {
         return {
-            height: globalThis.innerHeight,
-            width: globalThis.innerWidth,
+            height: win.innerHeight,
+            width: win.innerWidth,
         };
     }
 
@@ -66,6 +71,10 @@ export class Meraki {
         return scriptObject;
     }
 
+    public tokenAgeInSeconds() {
+        return (new Date().getTime() - parseInt(`${this.data.mintedAt}`)) / 1000;
+    }
+
     isScriptRegistered() {
         return this.registerScriptCalled;
     }
@@ -75,7 +84,6 @@ export class Meraki {
         this.tokenData.tokenHash = hash;
         this.registerScriptCalled = false;
 
-        // // @ts-ignore
-        // this.randomObj = new Random(this.tokenData);
+        this.randomObj = new Random(this.tokenData);
     }
 }

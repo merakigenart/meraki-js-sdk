@@ -7,7 +7,7 @@ export const registerScript = (scriptObject: MerakiScript): MerakiScript => {
     return scriptObject;
 };
 
-export const generateRandomTokenData = (projectNum: number) => {
+export const generateRandomTokenData = (projectNum = 0) => {
     const data = {
         tokenHash: '',
         tokenId: '',

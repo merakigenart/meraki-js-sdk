@@ -39,19 +39,4 @@ Meraki.registerScript(new Script());
         .trim();
 }
 
-export const generateRandomTokenData = () => {
-    const projectNum = Math.floor(Math.random() * 1000);
-    const data = {
-        tokenHash: '',
-        tokenId: (projectNum * 1000000 + Math.floor(Math.random() * 1000)).toString(),
-    };
-    let hash = '0x';
-
-    for (let i = 0; i < 64; i++) {
-        hash += Math.floor(Math.random() * 16).toString(16);
-    }
-
-    data.tokenHash = hash;
-
-    return data;
-};
+export { generateRandomTokenData } from './helpers';

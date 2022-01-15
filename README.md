@@ -12,10 +12,12 @@
         - [`data`](#data)
         - [`utils`](#utils)
           - [`hash`](#hash)
+          - [`chunkify()`](#chunkify)
         - [`random`](#random)
         - [`window`](#window)
       - [Methods](#methods)
         - [`registerScript()`](#registerscript)
+        - [`tokenAgeInSeconds()`](#tokenageinseconds)
     - [The `Script` class](#the-script-class)
       - [Required Methods](#required-methods)
         - [`execute()`](#execute)
@@ -71,7 +73,7 @@ npm install meraki-js-sdk
 
 ### Submitting your work
 
-The package you submit for review should contain a `Script.js` file that exports a [`Script`](#the-script-class) class, and a `ScriptTraits.js` file that exports a [`ScriptTraits`](#script-traits) class.  Both files should use named exports (ESM).
+The package you submit for review should contain a `Script.js` file that exports a [`Script`](#the-script-class) class, and a `ScriptTraits.js` file that exports a [`ScriptTraits`](#the-scripttraits-class) class.  Both files should use named exports (ESM).
 
 **Do not submit minified or transpiled/compiled scripts.**
 
@@ -88,7 +90,7 @@ Please see the [Artist Application](https://mraki.io/application) on [mraki.io](
 The `Meraki.canvas` property provides information about the canvas you should create.  It has `width` and `height` properties:
 
 ```ts
-interface MerakiCanvasInformation {
+interface Dimensions {
     height: number;
     width: number;
 }
@@ -102,17 +104,18 @@ The `Meraki.data` property provides information about the image to generate, inc
 interface MerakiTokenData {
     tokenHash: string; // random 64-character hexadecimal value used for seeding RNGs, etc.; starts with '0x'.
     tokenId: string; // the specific token (NFT) identifier that the script is creating.
+    mintedAt: number|string; // the unix timestamp that the minting of the token occurred.
 }
 ```
 
-Seed your RNG functions with the `tokenHash`:
+You may seed your RNG functions with the `tokenHash` value:
 
 ```js
-function my_custom_rng(value) {
+function my_custom_rng(seed) {
     // do some work
 }
 
-my_custom_rng(Meraki.data.tokenHash);
+const value = my_custom_rng(Meraki.data.tokenHash);
 ```
 
 ##### `utils`
@@ -132,6 +135,19 @@ const hash1 = Meraki.utils.hash.sha256('my string');
 const hash2 = Meraki.utils.hash.murmurhash3.hash32('my string');
 ```
 
+###### `chunkify()`
+
+The `chunkify()` function separates string into chunks of the same size.
+
+```ts
+// function signature
+function chunkify(str: string, size: number): string[];
+```
+
+```js
+const hashChunks = Meraki.utils.chunkify(Meraki.data.tokenHash, 4);
+```
+
 ##### `random`
 
 The `Meraki.random` property provides access to random value generation functions using a `Random` class.
@@ -146,7 +162,7 @@ You may access the helper methods via the `Meraki.random` class, which provides 
 - `generateSeeds()`: returns an array of unsigned integers derived from the entropy hash, each between 4 and 5 digits long
 - `integer(min, max)`: random integer; both `min` and `max` are optional integer values
 - `number(min, max)`: random number; both `min` and `max` are optional integer values
-- `shuffle(array)`: shuffle the items of an array
+- `shuffle(array)`: return a copy of an array with the items shuffled
 
 
 ```js
@@ -160,8 +176,6 @@ You may access the helper methods via the `Meraki.random` class, which provides 
         console.log(`loop ${i + 1}: `, Meraki.random.boolean(10));
     }
 ```
-
-
 
 ##### `window`
 
@@ -179,6 +193,10 @@ interface MerakiWindowInformation {
 ##### `registerScript()`
 
 The `Meraki.registerScript(instance)` method registers your script class to allow for automated rendering of your code.  You may call this method manually as the last line in your script, or omit it entirely (and added automatically).
+
+##### `tokenAgeInSeconds()`
+
+The `Meraki.tokenAgeInSeconds()` method returns the number of seconds since the token was originally minted.
 
 ### The `Script` class
 
@@ -209,6 +227,7 @@ You must provide a `version` method that returns a [semantic version](https://gi
 
 Every script class must have a `configure` method that returns a `MerakiScriptConfiguration` type object with the following properties:
 
+- `animation`: a boolean indicating if the generated image is an animation. _optional_.
 - `sdkVersion`: a string containing the SDK version used when developing your script.  Valid values include '2', '2.0', '2.0.1', etc. _optional_.
 - `renderTimeMs`: an integer value that indicates an approximate time in milliseconds for how long the script takes to render. _optional_.
 - `library`: returns an object with `name` and `version` properties that specify the name and desired version of the rendering library to use. _optional_.
@@ -216,6 +235,7 @@ Every script class must have a `configure` method that returns a `MerakiScriptCo
 ```js
     configure() {
         return {
+            animation: false,
             sdkVersion: '2.0',
             renderTimeMs: 100,
             library: {
@@ -238,6 +258,8 @@ For reference, the `MerakiScriptConfiguration` interface definition is as follow
 
 ```ts
 interface MerakiScriptConfiguration {
+    animation?: boolean;
+    sdkVersion?: string;
     renderTimeMs?: number;
     library?: {
         name?: string;
