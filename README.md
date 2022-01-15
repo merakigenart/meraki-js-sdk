@@ -254,18 +254,14 @@ The `draw` method is where you place code that renders the artwork in a loop _(i
 
 ### The `ScriptTraits` class
 
-The `ScriptTraits` class you create must extend the `MerakiScriptTraits` class.
-
-Your script must define all possible trait names and values that may exist within a generated image.  This should be defined as a separate class named `ScriptTraits` that extends the abstract class `MerakiScriptTraits`.  Each feature name should be a method, should be **singluar** and not plural, and its return value should always be an array of all possible values for that feature.
+Your script must define all possible trait names and values that may exist within a generated image.  This should be defined as a separate class named `ScriptTraits` that does not extend any other class.  Each feature name should be a method, should be **singluar** and not plural, and its return value should always be an array of all possible values for that feature.
 
 The package you submit for review should contain a `ScriptTraits.js` file that exports a `ScriptTraits` class as a named export (ESM).
 
 For example:
 
 ```js
-import { MerakiScriptTraits } from 'meraki-js-sdk/sdk';
-
-export class ScriptTraits extends MerakiScriptTraits {
+export class ScriptTraits {
     color() {
         return ['red', 'blue', 'green', 'purple'];
     }
