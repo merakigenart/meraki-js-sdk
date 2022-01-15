@@ -733,6 +733,7 @@ var Random = class {
   generateSeeds(str) {
     let part = 0;
     const seeds = [];
+    str = `${str}`;
     if (str.startsWith("0x")) {
       str = str.slice(2);
     }
