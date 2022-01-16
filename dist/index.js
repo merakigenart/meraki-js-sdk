@@ -825,6 +825,9 @@ var Meraki = class {
       width: win.innerWidth
     };
   }
+  get hasScriptRegistered() {
+    return this.registerScriptCalled;
+  }
   registerScript(scriptObject) {
     this.registerScriptCalled = true;
     globalThis[config_default.scriptInstanceName] = scriptObject;

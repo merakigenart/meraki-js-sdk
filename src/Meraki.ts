@@ -64,6 +64,10 @@ export class Meraki {
         };
     }
 
+    get hasScriptRegistered() {
+        return this.registerScriptCalled;
+    }
+
     public registerScript(scriptObject: MerakiScript): MerakiScript {
         this.registerScriptCalled = true;
 
@@ -76,7 +80,7 @@ export class Meraki {
         return (new Date().getTime() - parseInt(`${this.data.mintedAt}`)) / 1000;
     }
 
-    isScriptRegistered() {
+    public isScriptRegistered() {
         return this.registerScriptCalled;
     }
 
