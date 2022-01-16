@@ -111,7 +111,7 @@ interface MerakiTokenData {
 }
 ```
 
-You may seed your RNG functions with the `tokenHash` value:
+While `Meraki` provides random number generation functions, if you choose to write your own you must seed it with the `tokenHash` value:
 
 ```js
 function my_custom_rng(seed) {
@@ -120,6 +120,8 @@ function my_custom_rng(seed) {
 
 const value = my_custom_rng(Meraki.data.tokenHash);
 ```
+
+Writing your own RNG function is optional - see the [random documentation](#random) for information on the functions that the `Meraki` class provides.
 
 ##### `utils`
 
