@@ -493,6 +493,19 @@ var murmurhash3 = {
 };
 
 // src/helpers.ts
+var generateRandomTokenData = (projectNum = 0) => {
+  const data = {
+    tokenHash: "",
+    tokenId: ""
+  };
+  let hash = "0x";
+  for (let i = 0; i < 64; i++) {
+    hash += Math.floor(Math.random() * 16).toString(16);
+  }
+  data.tokenHash = hash;
+  data.tokenId = (projectNum * 1e6 + Math.floor(Math.random() * 1e3)).toString();
+  return data;
+};
 function chunkify(str, size) {
   const chunks = [];
   for (let i = 0; i < str.length; i += size) {
@@ -909,11 +922,14 @@ Meraki.registerScript(new Script());
 
 // src/index.ts
 var merakiSdk = {
-  Meraki: new Meraki(globalThis.tokenId, globalThis.tokenHash),
+  Meraki,
   MerakiScript,
-  generateNewSdkTemplate
+  generateNewSdkTemplate,
+  generateRandomTokenData
 };
-window.Meraki = merakiSdk.Meraki;
+window.Meraki = (tokenData) => {
+  window.Meraki = new merakiSdk.Meraki(tokenData.tokenId, tokenData.tokenHash);
+};
 globalThis.MerakiScript = merakiSdk.MerakiScript;
 globalThis.merakiSdk = merakiSdk;
 globalThis.merakiRender = () => {

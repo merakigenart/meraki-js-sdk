@@ -24,6 +24,7 @@
         - [`initialize()`](#initialize)
         - [`version()`](#version)
         - [`configure()`](#configure)
+        - [`traits()`](#traits)
       - [Optional Methods](#optional-methods)
         - [`draw()`](#draw)
     - [The `ScriptTraits` class](#the-scripttraits-class)
@@ -42,7 +43,9 @@
 
 ## Overview
 
-THe Meraki platform requires that artists provide scripts created using a framework that we provide - this SDK.  At its core, a script is an ES2015+ class that extends a base class and implemented specific methods.
+THe [Meraki platform](https://mraki.io) requires that artists provide scripts created using a framework that we provide - this SDK.  At its core, a script is an ES2015+ class that extends a base class and implemented specific methods.
+
+**Note: This SDK is a beta release and is subject to change.**
 
 ### Writing Scripts for Meraki
 
@@ -265,6 +268,36 @@ interface MerakiScriptConfiguration {
         name?: string;
         version?: string;
     };
+}
+```
+
+
+##### `traits()`
+
+Every script class must have a `traits` method that returns a an array of trait names and values that were used during the generation of the image based on the entropy hash.  There are different ways of storing this information, but you might choose to store the selected traits as properties on the `Script` class:
+
+```js
+traits() {
+    return [
+        { color: this.selectedColorTrait },
+        { size: this.selectedSizeTrait },
+    ];
+}
+```
+
+A more efficient way might be to calculate the traits selected within the method itself:
+
+```js
+traits() {
+    const traits = new ScriptTraits();
+
+    const color = Meraki.random.element(traits.color());
+    const size = Meraki.random.element(traits.size());
+
+    return [
+        { color },
+        { size },
+    ];
 }
 ```
 

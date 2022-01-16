@@ -1,5 +1,5 @@
 {
-    "name": "meraki-sdk",
+    "name": "meraki-js-sdk",
     "version": "1.0.0",
     "author": "Patrick Organ <patrick@permafrost.dev>",
     "description": "meraki javascript sdk",
@@ -18,8 +18,16 @@
     "bugs": {
         "url": "https://github.com/merakigenart/meraki-js-sdk/issues"
     },
-    "main": "dist/index.js",
-    "typings": "./dist/index.d.ts",
+    "main": "./dist/index.js",
+    "typings": "./dist/sdk.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js"
+        },
+        "./sdk": {
+            "import": "./dist/sdk.js"
+        }
+    },
     "scripts": {
         "analyze:deps:circular": "node_modules/.bin/madge --extensions js,ts --circular --ts-config ./tsconfig.json src/**",
         "analyze:deps:list": "node_modules/.bin/madge --extensions js,ts --ts-config ./tsconfig.json src/**",
@@ -32,7 +40,7 @@
         "lint:staged": "./node_modules/.bin/lint-staged",
         "fix": "npm run fmt && npm run lint:fix",
         "build:dev:cli": "./node_modules/.bin/esbuild --platform=node --target=node16 --define:__APP_VERSION__=\"'1.0'\" --format=cjs --bundle --outdir=dist src/index.ts",
-        "build:dts": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts",
+        "build:dts": "dts-bundle-generator -o ./dist/sdk.d.ts ./src/sdk.ts",
         "build:dev": "node ./scripts/build.js",
         "build:prod": "node ./scripts/build.js --production",
         "build:all": "npm run build:prod",

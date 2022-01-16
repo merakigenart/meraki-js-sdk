@@ -1,11 +1,12 @@
 import { Meraki } from '@/Meraki';
 import { MerakiScript } from '@/MerakiScript';
-import * as utils from '@/Utilities';
+import { generateRandomTokenData } from './helpers';
+//import * as utils from '@/Utilities';
 
 export const sdk = {
     Meraki,
     MerakiScript,
-    utils,
+    generateRandomTokenData,
 };
 
 export default sdk;

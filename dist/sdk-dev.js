@@ -1,9 +1,5 @@
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
 var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
@@ -886,54 +882,11 @@ var MerakiScript = class {
   }
 };
 
-// src/Utilities.ts
-var Utilities_exports = {};
-__export(Utilities_exports, {
-  generateNewSdkTemplate: () => generateNewSdkTemplate,
-  generateRandomTokenData: () => generateRandomTokenData
-});
-function generateNewSdkTemplate() {
-  return `
-class Script extends MerakiScript {
-    execute() {
-        // p5 setup() code here
-        |||
-    }
-
-    draw() {
-        super.draw();
-        // p5 draw() code here
-    }
-
-    initialize() {
-        super.initialize();
-        // p5 preload() code here
-    }
-
-    version() {
-        return '0.0.1';
-    }
-
-    configure() {
-        return {
-            renderTimeMs: 50,
-            library: {
-                name: 'p5',
-                version: '1.4.0',
-            }
-        }
-    }
-}
-
-Meraki.registerScript(new Script());
-`.replace("|||", "").trim();
-}
-
-// src/sdk.js
+// src/sdk.ts
 var sdk = {
   Meraki,
   MerakiScript,
-  utils: Utilities_exports
+  generateRandomTokenData
 };
 
 // src/sdk-dev.js

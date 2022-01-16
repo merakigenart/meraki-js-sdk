@@ -7,59 +7,7 @@ export class Random {
     protected state: Record<string, any>;
     protected seedValues: Record<string, any>;
 
-    prngA;
-    prngB;
-    useA = false;
-
     constructor(public tokenData = { tokenHash: '', tokenId: '' }) {
-        this.useA = false;
-        const sfc32 = class {
-            handler;
-            constructor(uint128Hex) {
-                let a = parseInt(uint128Hex.substr(0, 8), 16);
-                let b = parseInt(uint128Hex.substr(8, 8), 16);
-                let c = parseInt(uint128Hex.substr(16, 8), 16);
-                let d = parseInt(uint128Hex.substr(24, 8), 16);
-
-                this.handler = function (seed = 4294967296) {
-                    if (seed === undefined) {
-                        seed = 4294967296;
-                    }
-
-                    a |= 0;
-                    b |= 0;
-                    c |= 0;
-                    d |= 0;
-                    const t = (((a + b) | 0) + d) | 0;
-                    d = (d + 1) | 0;
-                    a = b ^ (b >>> 9);
-                    b = (c + (c << 3)) | 0;
-                    c = (c << 21) | (c >>> 11);
-                    c = (c + t) | 0;
-                    return (t >>> 0) / seed;
-                };
-            }
-        };
-        // const hashPartLength = (tokenData.tokenHash.length - 2) / 2;
-
-        // const seedStr = tokenData.tokenHash.slice(2);
-        // const seeds = [];
-
-        // for(let i = 0; i <= 64; i++) {
-        //     seeds.push(seedStr.substring(i, 4));
-        //     i += 4;
-        // }
-
-        // // seed prngA with first half of tokenData.hash
-        // this.prngA = new sfc32(tokenData.tokenHash.substring(2, hashPartLength)).handler;
-        // // seed prngB with second half of tokenData.hash
-        // this.prngB = new sfc32(tokenData.tokenHash.substring(hashPartLength + 2, hashPartLength)).handler;
-
-        // for (let i = 0; i < 1e6; i += 2) {
-        //     this.prngA();
-        //     this.prngB();
-        // }
-
         if (this.tokenData.tokenHash === '') {
             this.tokenData.tokenHash = '0x940cca72744643225ef08d17711cb873940cca72744643225ef08d17711cb873';
         }

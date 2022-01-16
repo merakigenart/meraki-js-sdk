@@ -5,14 +5,19 @@
 import { Meraki } from './Meraki';
 import { MerakiScript } from './MerakiScript';
 import { generateNewSdkTemplate } from './Utilities';
+import { generateRandomTokenData } from './helpers';
 
 const merakiSdk = {
-    Meraki: new Meraki(globalThis.tokenId, globalThis.tokenHash),
+    Meraki: Meraki,
     MerakiScript,
     generateNewSdkTemplate,
+    generateRandomTokenData,
 };
 
-window.Meraki = merakiSdk.Meraki;
+window.Meraki = tokenData => {
+    window.Meraki = new merakiSdk.Meraki(tokenData.tokenId, tokenData.tokenHash);
+};
+
 globalThis.MerakiScript = merakiSdk.MerakiScript;
 globalThis.merakiSdk = merakiSdk;
 

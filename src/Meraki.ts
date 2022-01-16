@@ -18,6 +18,7 @@ export interface MerakiTokenData {
     mintedAt: number | string;
 }
 
+// @ts-ignore
 const win: Record<any, any> = window || globalThis || {};
 
 export class Meraki {
