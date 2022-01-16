@@ -393,6 +393,14 @@ class Script extends MerakiScript {
             }
         }
     }
+
+        traits() {
+        const color = Meraki.random.element(new ScriptTraits().color());
+
+        return [
+            { color, size: 'small' }
+        ]
+    }
 }
 ```
 
@@ -444,6 +452,14 @@ class Script extends MerakiScript {
         return {
             renderTimeMs: 50
         }
+    }
+
+    traits() {
+        const color = Meraki.random.element(new ScriptTraits().color());
+
+        return [
+            { color, size: 'small' }
+        ]
     }
 }
 ```
