@@ -662,35 +662,6 @@ var Random = class {
     this.tokenData = tokenData;
     __publicField(this, "state");
     __publicField(this, "seedValues");
-    __publicField(this, "prngA");
-    __publicField(this, "prngB");
-    __publicField(this, "useA", false);
-    this.useA = false;
-    const sfc32 = class {
-      constructor(uint128Hex) {
-        __publicField(this, "handler");
-        let a = parseInt(uint128Hex.substr(0, 8), 16);
-        let b = parseInt(uint128Hex.substr(8, 8), 16);
-        let c = parseInt(uint128Hex.substr(16, 8), 16);
-        let d = parseInt(uint128Hex.substr(24, 8), 16);
-        this.handler = function(seed = 4294967296) {
-          if (seed === void 0) {
-            seed = 4294967296;
-          }
-          a |= 0;
-          b |= 0;
-          c |= 0;
-          d |= 0;
-          const t = (a + b | 0) + d | 0;
-          d = d + 1 | 0;
-          a = b ^ b >>> 9;
-          b = c + (c << 3) | 0;
-          c = c << 21 | c >>> 11;
-          c = c + t | 0;
-          return (t >>> 0) / seed;
-        };
-      }
-    };
     if (this.tokenData.tokenHash === "") {
       this.tokenData.tokenHash = "0x940cca72744643225ef08d17711cb873940cca72744643225ef08d17711cb873";
     }
