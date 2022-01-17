@@ -43,7 +43,7 @@
 
 ## Overview
 
-THe [Meraki platform](https://mraki.io) requires that artists provide scripts created using a framework that we provide - this SDK.  At its core, a script is an ES2015+ class that extends a base class and implemented specific methods.
+The [Meraki platform](https://mraki.io) requires that artists provide scripts created using a framework that we provide - this SDK.  At its core, a script is an ES2015+ class that extends a base class and implemented specific methods.
 
 **Note: This SDK is a beta release and is subject to change.**
 
@@ -394,7 +394,7 @@ class Script extends MerakiScript {
         }
     }
 
-        traits() {
+    traits() {
         const color = Meraki.random.element(new ScriptTraits().color());
 
         return [
