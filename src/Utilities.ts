@@ -31,9 +31,11 @@ class Script extends MerakiScript {
             }
         }
     }
-}
 
-Meraki.registerScript(new Script());
+    traits() {
+        return [];
+    }
+}
 `
         .replace('|||', '')
         .trim();
