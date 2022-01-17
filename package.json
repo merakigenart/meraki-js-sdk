@@ -1,6 +1,6 @@
 {
     "name": "meraki-js-sdk",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "author": "Patrick Organ <patrick@permafrost.dev>",
     "description": "meraki javascript sdk",
     "license": "MIT",
