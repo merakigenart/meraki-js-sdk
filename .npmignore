@@ -22,3 +22,4 @@ package-lock.json
 prettier.config.js
 rollup.*.js
 tsconfig.json
+.gitattributes
