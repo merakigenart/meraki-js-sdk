@@ -1,3 +1,7 @@
+<p align="center">
+    <img style="width: 400px;" src="https://repository-images.githubusercontent.com/448071637/0d3befa7-1dfe-42b6-b360-637a9b00202a" alt="" />
+</p>
+
 # Meraki Script SDK
 
 - [Meraki Script SDK](#meraki-script-sdk)
