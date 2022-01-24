@@ -26,10 +26,10 @@
       - [Required Methods](#required-methods)
         - [`execute()`](#execute)
         - [`initialize()`](#initialize)
-        - [`version()`](#version)
         - [`configure()`](#configure)
         - [`traits()`](#traits)
       - [Optional Methods](#optional-methods)
+        - [`version()`](#version)
         - [`draw()`](#draw)
     - [The `ScriptTraits` class](#the-scripttraits-class)
     - [Creating Scripts for P5](#creating-scripts-for-p5)
@@ -222,16 +222,6 @@ The `execute` method is where you place the code that renders the artwork.  It's
 
 Called before execution to allow for initial setup of class properties or other values and actions to prepare for rendering.  When using the `p5` library, it calls `preload()`.
 
-##### `version()`
-
-You must provide a `version` method that returns a [semantic version](https://github.com/semver/semver/blob/master/semver.md) string for the current version of your script.
-
-```js
-    version() {
-        return '1.2.0';
-    }
-```
-
 ##### `configure()`
 
 Every script class must have a `configure` method that returns a `MerakiScriptConfiguration` type object with the following properties:
@@ -308,6 +298,16 @@ traits() {
 ```
 
 #### Optional Methods
+
+##### `version()`
+
+You may provide a `version` method that returns a [semantic version](https://github.com/semver/semver/blob/master/semver.md) string for the current version of your script.
+
+```js
+    version() {
+        return '1.2.0';
+    }
+```
 
 ##### `draw()`
 
