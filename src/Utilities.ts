@@ -18,13 +18,10 @@ class Script extends MerakiScript {
         // p5 preload() code here
     }
 
-    version() {
-        return '0.0.1';
-    }
-
     configure() {
         return {
             renderTimeMs: 50,
+            sdkVersion: '1.1.0',
             library: {
                 name: 'p5',
                 version: '1.4.0',
@@ -33,7 +30,7 @@ class Script extends MerakiScript {
     }
 
     traits() {
-        return [];
+        return {};
     }
 }
 `

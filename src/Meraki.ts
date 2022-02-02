@@ -4,8 +4,8 @@ import config from '@/config';
 import { murmurhash3 } from '@/lib/murmurhash3';
 import { sha256 } from '@/lib/sha256';
 import { MerakiScript } from '@/MerakiScript';
-import { Random } from '@/Random';
 import { chunkify } from '@/helpers';
+import { BaseRandom } from '@/BaseRandom';
 
 export interface Dimensions {
     height: number;
@@ -30,7 +30,7 @@ export class Meraki {
 
     protected registerScriptCalled = false;
 
-    protected randomObj!: Random;
+    protected randomObj!: BaseRandom;
 
     get random() {
         return this.randomObj;
@@ -89,6 +89,6 @@ export class Meraki {
         this.tokenData.tokenHash = hash;
         this.registerScriptCalled = false;
 
-        this.randomObj = new Random(this.tokenData);
+        this.randomObj = new BaseRandom(this.tokenData);
     }
 }

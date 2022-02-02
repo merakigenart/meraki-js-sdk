@@ -26,12 +26,18 @@ export class Random {
 
     // random number between a (inclusive) and b (exclusive)
     number(a = undefined, b = undefined) {
-        if (a === undefined) {
+        if (a === undefined && b === undefined) {
             a = 0;
+            b = Number.MAX_VALUE - 2;
         }
 
         if (b === undefined) {
-            b = Number.MAX_VALUE - 2;
+            b = a;
+            a = 0;
+        }
+
+        if (a === undefined) {
+            a = 0;
         }
 
         return a + (b - a) * this.decimal();
@@ -40,12 +46,18 @@ export class Random {
     // random integer between a (inclusive) and b (inclusive)
     // requires a < b for proper probability distribution
     integer(a = undefined, b = undefined) {
-        if (a === undefined) {
+        if (a === undefined && b === undefined) {
             a = 0;
+            b = Number.MAX_VALUE - 2;
         }
 
         if (b === undefined) {
-            b = Number.MAX_VALUE - 2;
+            b = a;
+            a = 0;
+        }
+
+        if (a === undefined) {
+            a = 0;
         }
 
         return Math.floor(this.number(a, b + 1));

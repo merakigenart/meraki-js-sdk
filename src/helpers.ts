@@ -11,6 +11,7 @@ export const generateRandomTokenData = (projectNum = 0) => {
     const data = {
         tokenHash: '',
         tokenId: '',
+        mintedAt: 0,
     };
 
     let hash = '0x';
