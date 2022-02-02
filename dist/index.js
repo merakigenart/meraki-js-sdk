@@ -496,7 +496,8 @@ var murmurhash3 = {
 var generateRandomTokenData = (projectNum = 0) => {
   const data = {
     tokenHash: "",
-    tokenId: ""
+    tokenId: "",
+    mintedAt: 0
   };
   let hash = "0x";
   for (let i = 0; i < 64; i++) {
@@ -656,38 +657,54 @@ function sha256(message) {
   return [H0, H1, H2, H3, H4, H5, H6, H7].map((e) => e.toString(16)).map((e) => pad(e, 8)).join("");
 }
 
-// src/Random.ts
-var Random = class {
+// src/BaseRandom.ts
+var BaseRandom = class {
   constructor(tokenData = { tokenHash: "", tokenId: "" }) {
     this.tokenData = tokenData;
-    __publicField(this, "state");
-    __publicField(this, "seedValues");
-    if (this.tokenData.tokenHash === "") {
-      this.tokenData.tokenHash = "0x940cca72744643225ef08d17711cb873940cca72744643225ef08d17711cb873";
+    __publicField(this, "useA", false);
+    __publicField(this, "prngA");
+    __publicField(this, "prngB");
+    const sfc32 = function(uint128Hex) {
+      let a = parseInt(uint128Hex.substr(0, 8), 16);
+      let b = parseInt(uint128Hex.substr(8, 8), 16);
+      let c = parseInt(uint128Hex.substr(16, 8), 16);
+      let d = parseInt(uint128Hex.substr(24, 8), 16);
+      return function() {
+        a |= 0;
+        b |= 0;
+        c |= 0;
+        d |= 0;
+        const t = (a + b | 0) + d | 0;
+        d = d + 1 | 0;
+        a = b ^ b >>> 9;
+        b = c + (c << 3) | 0;
+        c = c << 21 | c >>> 11;
+        c = c + t | 0;
+        return (t >>> 0) / 4294967296;
+      };
+    };
+    this.prngA = new sfc32(tokenData.tokenHash.substring(2, 32));
+    this.prngB = new sfc32(tokenData.tokenHash.substring(34, 32));
+    for (let i = 0; i < 1e6; i += 2) {
+      this.prngA();
+      this.prngB();
     }
-    const seeds = this.generateSeeds(this.tokenData.tokenHash);
-    this.state = this.initializeState().state;
-    this.seedValues = this.initializeSeeds(seeds);
-    this.rnd();
   }
   decimal() {
-    return this.rnd();
+    this.useA = !this.useA;
+    return this.useA ? this.prngA() : this.prngB();
   }
-  number(a = void 0, b = void 0) {
-    if (a === void 0) {
-      a = 0;
-    }
+  number(a, b = void 0) {
     if (b === void 0) {
-      b = Number.MAX_VALUE - 2;
+      b = a;
+      a = 0;
     }
     return a + (b - a) * this.decimal();
   }
-  integer(a = void 0, b = void 0) {
-    if (a === void 0) {
-      a = 0;
-    }
+  integer(a, b = void 0) {
     if (b === void 0) {
-      b = Number.MAX_VALUE - 2;
+      b = a;
+      a = 0;
     }
     return Math.floor(this.number(a, b + 1));
   }
@@ -695,90 +712,7 @@ var Random = class {
     return this.decimal() < p * 0.1;
   }
   element(list) {
-    return list[this.integer(0, list.length - 1)];
-  }
-  generateSeeds(str) {
-    let part = 0;
-    const seeds = [];
-    str = `${str}`;
-    if (str.startsWith("0x")) {
-      str = str.slice(2);
-    }
-    for (let i = 0; i < str.length; i++) {
-      part = str.slice(i, i + 4);
-      seeds.push(parseInt(part, 16));
-      i += 4;
-    }
-    for (let i = 0; i < str.length; i++) {
-      part = str.slice(i, i + 4);
-      seeds.push(parseInt(part, 16));
-      i += 2;
-    }
-    for (let i = 0; i < str.length; i++) {
-      part = str.slice(i, i + 4);
-      seeds.push(parseInt(part, 16));
-      i += 1;
-    }
-    for (let i = 0; i < str.length; i++) {
-      part = str.substring(str.length - i - 4, str.length - i);
-      part = part.substring(2, 4) + part.substring(0, 2);
-      seeds.push(parseInt(part, 16));
-      i += 4;
-    }
-    return seeds;
-  }
-  initializeSeeds(seeds) {
-    const seedValues = Object.assign({}, {
-      eps: Math.pow(2, -32),
-      m0: seeds[0],
-      m1: seeds[1],
-      m2: seeds[2],
-      m3: seeds[3],
-      a0: seeds[4],
-      a1: seeds[5],
-      a2: seeds[6],
-      a3: seeds[7]
-    });
-    return seedValues;
-  }
-  initializeState(stateSize = 4, integerSize = 16) {
-    const intMap = {
-      8: Uint8Array,
-      16: Uint16Array,
-      32: Uint32Array,
-      64: BigUint64Array
-    };
-    const intClass = intMap[integerSize];
-    const state = new intClass(stateSize);
-    const dataView = new DataView(state.buffer);
-    return {
-      integerSize,
-      stateSize,
-      state,
-      dataView
-    };
-  }
-  rnd() {
-    const { eps, a0, a1, a2, a3, m0, m1, m2, m3 } = this.seedValues;
-    const a = this.state[0], b = this.state[1], c = this.state[2], e = this.state[3], f = 0 | a0 + m0 * a, g = 0 | a1 + m0 * b + (m1 * a + (f >>> 16)), h = 0 | a2 + m0 * c + m1 * b + (m2 * a + (g >>> 16));
-    this.state[0] = f;
-    this.state[1] = g;
-    this.state[2] = h;
-    this.state[3] = a3 + m0 * e + (m1 * c + m2 * b) + (m3 * a + (h >>> 16));
-    const i = (e << 21) + ((e >> 2 ^ c) << 5) + ((c >> 2 ^ b) >> 11);
-    return eps * ((i >>> (e >> 11) | i << (31 & -(e >> 11))) >>> 0);
-  }
-  shuffle(a) {
-    const f = [...a];
-    let b, c, e = a.length;
-    for (let i = 0; i < e; i++) {
-      b = ~~(this.rnd() * e - 1);
-      c = f[e];
-      f[e] = f[b];
-      f[b] = c;
-      e--;
-    }
-    return f;
+    return list[this.number(0, list.length - 1)];
   }
 };
 
@@ -796,7 +730,7 @@ var Meraki = class {
     this.tokenData.tokenId = tokenId;
     this.tokenData.tokenHash = hash;
     this.registerScriptCalled = false;
-    this.randomObj = new Random(this.tokenData);
+    this.randomObj = new BaseRandom(this.tokenData);
   }
   get random() {
     return this.randomObj;
@@ -875,13 +809,10 @@ class Script extends MerakiScript {
         // p5 preload() code here
     }
 
-    version() {
-        return '0.0.1';
-    }
-
     configure() {
         return {
             renderTimeMs: 50,
+            sdkVersion: '1.1.0',
             library: {
                 name: 'p5',
                 version: '1.4.0',
@@ -890,7 +821,7 @@ class Script extends MerakiScript {
     }
 
     traits() {
-        return [];
+        return {};
     }
 }
 `.replace("|||", "").trim();
@@ -903,14 +834,11 @@ var merakiSdk = {
   generateNewSdkTemplate,
   generateRandomTokenData
 };
-window.Meraki = (tokenData) => {
-  window.Meraki = new merakiSdk.Meraki(tokenData.tokenId, tokenData.tokenHash);
+globalThis.Meraki = (tokenData) => {
+  globalThis.Meraki = new merakiSdk.Meraki(tokenData.tokenId, tokenData.tokenHash);
 };
 globalThis.MerakiScript = merakiSdk.MerakiScript;
 globalThis.merakiSdk = merakiSdk;
-globalThis.merakiRender = () => {
-  globalThis.tokenScript.render();
-};
 globalThis.registerScript = merakiSdk.Meraki.registerScript;
 /*!
  * +----------------------------------------------------------------------------------+

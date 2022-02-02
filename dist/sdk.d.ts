@@ -18,47 +18,25 @@ declare abstract class MerakiScript {
 	finalize(): void;
 	render(): void;
 }
-declare class Random {
+declare function chunkify(str: string, size: number): string[];
+declare class BaseRandom {
 	tokenData: {
 		tokenHash: string;
 		tokenId: string;
 	};
-	protected state: Record<string, any>;
-	protected seedValues: Record<string, any>;
-	prngA: any;
-	prngB: any;
 	useA: boolean;
+	prngA: () => number;
+	prngB: () => number;
 	constructor(tokenData?: {
 		tokenHash: string;
 		tokenId: string;
 	});
 	decimal(): number;
-	number(a?: undefined, b?: undefined): any;
-	integer(a?: undefined, b?: undefined): number;
+	number(a: number, b?: number | undefined): number;
+	integer(a: number, b?: number | undefined): number;
 	boolean(p?: number): boolean;
 	element(list: any): any;
-	generateSeeds(str: string): number[];
-	protected initializeSeeds(seeds: number[]): {
-		eps: number;
-		m0: number;
-		m1: number;
-		m2: number;
-		m3: number;
-		a0: number;
-		a1: number;
-		a2: number;
-		a3: number;
-	};
-	protected initializeState(stateSize?: number, integerSize?: 8 | 16 | 32 | 64): {
-		integerSize: 64 | 16 | 8 | 32;
-		stateSize: number;
-		state: Uint8Array | Uint16Array | Uint32Array | BigUint64Array;
-		dataView: DataView;
-	};
-	rnd(): number;
-	shuffle(a: any[]): any[];
 }
-declare function chunkify(str: string, size: number): string[];
 export declare type Brand<Name, Type> = Type & {
 	_type?: Name;
 };
@@ -98,8 +76,8 @@ export interface MerakiTokenData {
 declare class Meraki {
 	protected tokenData: MerakiTokenData;
 	protected registerScriptCalled: boolean;
-	protected randomObj: Random;
-	get random(): Random;
+	protected randomObj: BaseRandom;
+	get random(): BaseRandom;
 	get data(): MerakiTokenData;
 	get utils(): {
 		hash: {
@@ -138,6 +116,7 @@ declare class Meraki {
 	};
 	get canvas(): Dimensions;
 	get window(): Dimensions;
+	get hasScriptRegistered(): boolean;
 	registerScript(scriptObject: MerakiScript): MerakiScript;
 	tokenAgeInSeconds(): number;
 	isScriptRegistered(): boolean;
@@ -146,6 +125,11 @@ declare class Meraki {
 export declare const sdk: {
 	Meraki: typeof Meraki;
 	MerakiScript: typeof MerakiScript;
+	generateRandomTokenData: (projectNum?: number) => {
+		tokenHash: string;
+		tokenId: string;
+		mintedAt: number;
+	};
 };
 export default sdk;
 
