@@ -4,6 +4,10 @@ All notable changes to `meraki-js-sdk` will be documented in this file.
 
 ---
 
+## 1.1.1 - 2022-Feb-02
+
+- fix typo in `Meraki.random.element()`
+
 ## 1.1.0 - 2022-Feb-02
 
 - refactored `Meraki.random.*` methods to always return same series of numbers based on the entropy hash
