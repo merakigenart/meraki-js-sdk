@@ -22,10 +22,12 @@
     "typings": "./dist/sdk.d.ts",
     "exports": {
         ".": {
-            "import": "./dist/index.js"
+            "import": "./dist/index.js",
+            "require": "./dist/index.js"
         },
         "./sdk": {
-            "import": "./dist/sdk.js"
+            "import": "./dist/sdk.js",
+            "require": "./dist/sdk.js"
         }
     },
     "scripts": {
