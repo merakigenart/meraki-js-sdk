@@ -712,7 +712,7 @@ var BaseRandom = class {
     return this.decimal() < p * 0.1;
   }
   element(list) {
-    return list[this.number(0, list.length - 1)];
+    return list[this.integer(0, list.length - 1)];
   }
 };
 
