@@ -9,6 +9,8 @@ const merakiSdk = {
     MerakiScript,
     generateNewSdkTemplate,
     generateRandomTokenData,
+    // @ts-ignore
+    version: __APP_VERSION__,
 };
 
 globalThis.Meraki = tokenData => {
