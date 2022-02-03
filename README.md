@@ -305,9 +305,9 @@ traits() {
 You may provide a `version` method that returns a [semantic version](https://github.com/semver/semver/blob/master/semver.md) string for the current version of your script.
 
 ```js
-    version() {
-        return '1.2.0';
-    }
+version() {
+    return '1.2.0';
+}
 ```
 
 ##### `draw()`
@@ -316,7 +316,7 @@ The `draw` method is where you place code that renders the artwork in a loop _(i
 
 ### The `ScriptTraits` class
 
-Your script must define all possible trait names and values that may exist within a generated image.  This should be defined as a separate class named `ScriptTraits` that does not extend any other class.  Each feature name should be a method, should be **singular** and not plural, and its return value should always be an array of all possible values for that feature.
+Your script must define all possible trait names and values that may exist within a generated image.  This should be defined as a separate class named `ScriptTraits` that does not extend any other class.  Each feature name should be a method, should be **singular** and not plural, written in camelCase, and its return value should always be an array of all possible values for that feature.
 
 The package you submit for review should contain a `ScriptTraits.js` file that exports a `ScriptTraits` class as a named export (ESM).
 
