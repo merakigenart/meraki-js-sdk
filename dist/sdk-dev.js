@@ -683,6 +683,9 @@ var BaseRandom = class {
         return (t >>> 0) / 4294967296;
       };
     };
+    if (typeof tokenData2.tokenHash !== "string") {
+      tokenData2.tokenHash = `0x${tokenData2.tokenHash.toString(16)}`;
+    }
     this.prngA = new sfc32(tokenData2.tokenHash.substring(2, 32));
     this.prngB = new sfc32(tokenData2.tokenHash.substring(34, 32));
     for (let i = 0; i < 1e6; i += 2) {
@@ -730,7 +733,7 @@ var Meraki = class {
     this.tokenData.tokenId = tokenId;
     this.tokenData.tokenHash = hash;
     this.registerScriptCalled = false;
-    this.randomObj = new BaseRandom(this.tokenData);
+    this.randomObj = new BaseRandom({ tokenHash: `${hash}`, tokenId: `${tokenId}` });
   }
   get random() {
     return this.randomObj;
