@@ -244,7 +244,7 @@ Every script class must have a `configure` method that returns a `MerakiScriptCo
     }
 ```
 
-If you are using plain javascript, set `library.name` to 'javascript and `library.version` to an empty string.
+If you are using plain javascript, set `library.name` to `'javascript'` and `library.version` to an empty string.
 
 All properties are optional, so this would also be a valid `configure()` method:
 
