@@ -69,9 +69,10 @@ export class Meraki {
     }
 
     public registerScript(scriptObject: MerakiScript): MerakiScript {
-        this.registerScriptCalled = true;
-
-        globalThis[config.scriptInstanceName] = scriptObject; // eslint-disable-line no-undef
+        if (!this.registerScriptCalled) {
+            this.registerScriptCalled = true;
+            globalThis[config.scriptInstanceName] = scriptObject; // eslint-disable-line no-undef
+        }
 
         return scriptObject;
     }
