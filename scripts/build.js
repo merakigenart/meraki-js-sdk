@@ -22,6 +22,20 @@ const buildConfigs = [
     },
     {
         basePath: `${__dirname}/..`,
+        outfile: 'dist/index.cjs.js',
+        format: 'cjs',
+        entry: 'src/index.ts',
+        bundle: true,
+        minify: false,
+        constants: {},
+        target: 'es2020',
+        platform: {
+            name: 'browser',
+            version: 74,
+        },
+    },
+    {
+        basePath: `${__dirname}/..`,
         outdir: 'dist',
         format: 'esm',
         entry: 'src/sdk.js',
@@ -68,11 +82,11 @@ class Builder {
         const results = [];
 
         for (let buildConfig of buildConfigs) {
-            const result = await esbuild.build({
+            const config = {
                 logLevel: 'silent',
                 absWorkingDir: buildConfig.basePath,
                 entryPoints: [buildConfig.entry],
-                outdir: buildConfig.outdir,
+                // outdir: buildConfig.outdir || '',
                 bundle: buildConfig.bundle,
                 external: ['util'],
                 format: buildConfig.format,
@@ -86,7 +100,15 @@ class Builder {
                     __COMPILED_AT__: `'${new Date().toUTCString()}'`,
                     ...buildConfig.constants,
                 },
-            });
+            };
+
+            if (typeof buildConfig['outfile'] === 'string') {
+                config['outfile'] = buildConfig['outfile'];
+            } else {
+                config['outdir'] = buildConfig['outdir'];
+            }
+
+            const result = await esbuild.build(config);
 
             results.push(result);
         }

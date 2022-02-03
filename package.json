@@ -18,9 +18,9 @@
     "bugs": {
         "url": "https://github.com/merakigenart/meraki-js-sdk/issues"
     },
-    "main": "./dist/index.js",
+    "main": "./dist/sdk.cjs.js",
     "typings": "./dist/sdk.d.ts",
-    "module": true,
+    "module": "./dist/sdk.js",
     "exports": {
         ".": {
             "import": "./dist/index.js",
@@ -28,7 +28,7 @@
         },
         "./sdk": {
             "import": "./dist/sdk.js",
-            "require": "./dist/sdk.js"
+            "require": "./dist/sdk.cjs.js"
         }
     },
     "scripts": {
