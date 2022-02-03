@@ -219,7 +219,7 @@ The `execute` method is where you place the code that renders the artwork.  It's
 
 ##### `initialize()`
 
-Called before execution to allow for initial setup of class properties or other values and actions to prepare for rendering.  When using the `p5` library, it calls `preload()`.
+Called before execution to allow for initial setup of class properties or other values and actions to prepare for rendering.  When using the `p5` library, it's equivalent to `preload()`.
 
 ##### `configure()`
 
