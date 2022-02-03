@@ -23,6 +23,12 @@ export class BaseRandom {
                 return (t >>> 0) / 4294967296;
             };
         };
+
+        if (typeof tokenData.tokenHash !== 'string') {
+            // @ts-ignore
+            tokenData.tokenHash = `0x${tokenData.tokenHash.toString(16)}`;
+        }
+
         // seed prngA with first half of tokenData.hash
         // @ts-ignore
         this.prngA = new sfc32(tokenData.tokenHash.substring(2, 32));

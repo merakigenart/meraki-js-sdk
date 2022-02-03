@@ -89,6 +89,6 @@ export class Meraki {
         this.tokenData.tokenHash = hash;
         this.registerScriptCalled = false;
 
-        this.randomObj = new BaseRandom(this.tokenData);
+        this.randomObj = new BaseRandom({ tokenHash: `${hash}`, tokenId: `${tokenId}` });
     }
 }
