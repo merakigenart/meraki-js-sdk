@@ -4,6 +4,11 @@ All notable changes to `meraki-js-sdk` will be documented in this file.
 
 ---
 
+## 1.1.2 - 2022-Feb-02
+
+- fix issue with `BaseRandom` class
+
+
 ## 1.1.1 - 2022-Feb-02
 
 - fix typo in `Meraki.random.element()`
