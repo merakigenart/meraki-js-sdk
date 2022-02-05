@@ -2,9 +2,9 @@
     <img style="width: 400px;" src="https://repository-images.githubusercontent.com/448071637/0d3befa7-1dfe-42b6-b360-637a9b00202a" alt="" />
 </p>
 
-# Meraki Script SDK
+# Meraki Javascript SDK
 
-- [Meraki Script SDK](#meraki-script-sdk)
+- [Meraki Javascript SDK](#meraki-javascript-sdk)
   - [Overview](#overview)
     - [Writing Scripts for Meraki](#writing-scripts-for-meraki)
     - [Creating A Project](#creating-a-project)
@@ -49,7 +49,7 @@
 
 The [Meraki platform](https://mraki.io) requires that artists provide scripts created using a framework that we provide - this SDK.  At its core, a script is an ES2015+ class that extends a base class and implemented specific methods.
 
-**Note: This SDK is a beta release and is subject to change.**
+> **Note: This SDK is a beta release and is subject to change.**
 
 ### Writing Scripts for Meraki
 
@@ -210,6 +210,8 @@ The `Meraki.tokenAgeInSeconds()` method returns the number of seconds since the 
 
 The `Script` class you create must extend the `MerakiScript` class.
 
+**NOTE: It is critical that you do not execute any code in the global namespace.  All code should be contained within class methods or functions.**
+**Submissions that do not observe this requirement may be rejected.**
 
 #### Required Methods
 
@@ -231,17 +233,17 @@ Every script class must have a `configure` method that returns a `MerakiScriptCo
 - `library`: returns an object with `name` and `version` properties that specify the name and desired version of the rendering library to use. _optional_.
 
 ```js
-    configure() {
-        return {
-            animation: false,
-            sdkVersion: '2.0',
-            renderTimeMs: 100,
-            library: {
-                name: 'p5',
-                version: '1.4.0',
-            }
-        };
-    }
+configure() {
+    return {
+        animation: false,
+        sdkVersion: '2.0',
+        renderTimeMs: 100,
+        library: {
+            name: 'p5',
+            version: '1.4.0',
+        }
+    };
+}
 ```
 
 If you are using plain javascript, set `library.name` to `'javascript'` and `library.version` to an empty string.
@@ -249,10 +251,12 @@ If you are using plain javascript, set `library.name` to `'javascript'` and `lib
 All properties are optional, so this would also be a valid `configure()` method:
 
 ```js
-    configure() {
-        return {};
-    }
+configure() {
+    return {};
+}
 ```
+
+It's strongly encouraged that you define the library name and version you are using for rendering.
 
 For reference, the `MerakiScriptConfiguration` interface definition is as follows:
 
@@ -345,6 +349,11 @@ export class ScriptTraits {
     }
 }
 ```
+
+> **It is important that you do not execute any code outside of the `ScriptTraits` class definition.**
+>
+> **You should ONLY define the `ScriptTraits` class in the `ScriptTraits.js` file.**
+
 
 ### Creating Scripts for P5
 
