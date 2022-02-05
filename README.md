@@ -7,6 +7,7 @@
 - [Meraki Javascript SDK](#meraki-javascript-sdk)
   - [Overview](#overview)
     - [Writing Scripts for Meraki](#writing-scripts-for-meraki)
+      - [Requirements](#requirements)
     - [Creating A Project](#creating-a-project)
     - [Submitting your work](#submitting-your-work)
   - [SDK Overview](#sdk-overview)
@@ -64,6 +65,11 @@ class Script extends MerakiScript {
 ```
 
 See [below](#the-script-class) for more information on creating the `Script` class implementation.
+
+
+#### Requirements
+
+Your script size, in total, may not exceed 60kb unminified.
 
 ### Creating A Project
 
