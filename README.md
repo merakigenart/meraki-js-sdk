@@ -240,7 +240,7 @@ Every script class must have a `configure` method that returns a `MerakiScriptCo
 - `animation`: a boolean indicating if the generated image is an animation. _optional_.
 - `sdkVersion`: a string containing the SDK version used when developing your script.  Valid values include '2', '2.0', '2.0.1', etc. _optional_.
 - `renderTimeMs`: an integer value that indicates an approximate time in milliseconds for how long the script takes to render. _optional_.
-- `library`: returns an object with `name` and `version` properties that specify the name and desired version of the rendering library to use. _optional_.
+- `library`: returns an object with `name` and `version` properties that specify the name and desired version of the rendering library to use. _required_.
 
 ```js
 configure() {
@@ -256,17 +256,23 @@ configure() {
 }
 ```
 
-If you are using plain javascript, set `library.name` to `'javascript'` and `library.version` to an empty string.
+If you are using plain javascript, set `library.name` to `'javascript'` and `library.version` to `'none'`.
 
-All properties are optional, so this would also be a valid `configure()` method:
+All properties except for `library` are optional, so this would also be a valid `configure()` method:
 
 ```js
 configure() {
-    return {};
+    return {
+        library: {
+            name: 'p5',
+            version: '1.x',
+        }
+    };
 }
 ```
 
-It's strongly encouraged that you define the library name and version you are using for rendering.
+- The `library.name` value must be the name of a supported library: `p5`, `three`, or `javascript`.
+- The `library.version` value must be a valid semver version, `latest`, or `none`.
 
 For reference, the `MerakiScriptConfiguration` interface definition is as follows:
 
