@@ -56,6 +56,9 @@ The [Meraki platform](https://mraki.io) requires that artists provide scripts cr
 
 To create a script for Meraki, you must use the framework (SDK) we provide as an npm package. This allows for uniformity between scripts, regardless of what rendering library is in use. This makes it easier to create scripts as there's a single, documented way to write a valid Meraki script.
 
+**It is important to note that you should NOT reference the `Meraki` class, `p5` functions, or any other external libraries from outside of the `Script` class.  Doing so may cause your script not to render, cause automated code analyzers to fail (resulting in approval delays), or other cause unforeseen errors.**
+
+
 The core of your script will be a modern ECMAScript class named `Script` that extends a `MerakiScript` class, as shown below:
 
 ```js
@@ -66,10 +69,11 @@ class Script extends MerakiScript {
 
 See [below](#the-script-class) for more information on creating the `Script` class implementation.
 
-
 #### Requirements
 
-Your script size, in total, may not exceed 60kb unminified.
+- Total submission size may not exceed 60kb unminified and uncompressed. This includes both `Script.js` and `ScriptTraits.js` combined.
+- Meraki does not accept minified or obfuscated submissions.
+- Scripts must pass all Meraki automated checks.
 
 ### Creating A Project
 
