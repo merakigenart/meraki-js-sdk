@@ -2,7 +2,7 @@
 
 import { Meraki } from '@/Meraki';
 import { MerakiScript } from '@/MerakiScript';
-import { generateRandomTokenData } from './helpers';
+import { generateRandomTokenData } from '@/helpers';
 
 export const sdk = {
     Meraki,

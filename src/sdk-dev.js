@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { sdk } from '@/sdk';
 
-const tokenData = sdk.utils.generateRandomTokenData();
+const tokenData = sdk.generateRandomTokenData();
 
 window.sdk = sdk;
 window.tokenId = tokenData.tokenId;
