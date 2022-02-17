@@ -7,16 +7,19 @@ export const registerScript = (scriptObject: MerakiScript): MerakiScript => {
     return scriptObject;
 };
 
-export const generateRandomTokenData = (projectNum = 0) => {
+export const generateRandomTokenData = (projectNum = 0, hash: string = '') => {
     const data = {
         tokenHash: '',
         tokenId: '',
         mintedAt: 0,
     };
 
-    let hash = '0x';
-    for (let i = 0; i < 64; i++) {
-        hash += Math.floor(Math.random() * 16).toString(16);
+    if (hash.length === 0 || ! hash.startsWith('0x')) {
+        hash = '0x';
+
+        for (let i = 0; i < 64; i++) {
+            hash += Math.floor(Math.random() * 16).toString(16);
+        }
     }
 
     data.tokenHash = hash;
