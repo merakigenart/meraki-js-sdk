@@ -21,10 +21,10 @@ class Script extends MerakiScript {
     configure() {
         return {
             renderTimeMs: 50,
-            sdkVersion: '1.1.0',
+            sdkVersion: '1.x',
             library: {
                 name: 'p5',
-                version: '1.4.0',
+                version: '1.4',
             }
         }
     }
