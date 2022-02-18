@@ -4,6 +4,13 @@ All notable changes to `meraki-js-sdk` will be documented in this file.
 
 ---
 
+## 1.2.0 - 2022-Feb-17
+
+- Bump dependency versions
+- Add parameter to pass a custom hash to `generateRandomTokenData()`
+- Minor SDK template adjustments
+- Code cleanup
+
 ## 1.1.2 - 2022-Feb-02
 
 - fix issue with `BaseRandom` class
