@@ -50,9 +50,9 @@ const buildConfigs = [
     },
     {
         basePath: `${__dirname}/..`,
-        outdir: 'dist',
+        outfile: 'dist/sdk.cjs.js',
         format: 'cjs',
-        entry: 'src/sdk.cjs.js',
+        entry: 'src/sdk.js',
         bundle: true,
         minify: false,
         constants: {},
