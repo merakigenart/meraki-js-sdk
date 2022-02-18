@@ -1,9 +1,37 @@
 var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __reExport = (target, module2, copyDefault, desc) => {
+  if (module2 && typeof module2 === "object" || typeof module2 === "function") {
+    for (let key of __getOwnPropNames(module2))
+      if (!__hasOwnProp.call(target, key) && (copyDefault || key !== "default"))
+        __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
+  }
+  return target;
+};
+var __toCommonJS = /* @__PURE__ */ ((cache) => {
+  return (module2, temp) => {
+    return cache && cache.get(module2) || (temp = __reExport(__markAsModule({}), module2, 1), cache && cache.set(module2, temp), temp);
+  };
+})(typeof WeakMap !== "undefined" ? /* @__PURE__ */ new WeakMap() : 0);
 var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
+
+// src/sdk.ts
+var sdk_exports = {};
+__export(sdk_exports, {
+  default: () => sdk_default,
+  sdk: () => sdk
+});
 
 // src/config.ts
 var config = {
@@ -797,57 +825,15 @@ var MerakiScript = class {
   }
 };
 
-// src/Utilities.ts
-function generateNewSdkTemplate() {
-  return `
-class Script extends MerakiScript {
-    execute() {
-        // p5 setup() code here
-        |||
-    }
-
-    draw() {
-        super.draw();
-        // p5 draw() code here
-    }
-
-    initialize() {
-        super.initialize();
-        // p5 preload() code here
-    }
-
-    configure() {
-        return {
-            renderTimeMs: 50,
-            sdkVersion: '1.x',
-            library: {
-                name: 'p5',
-                version: '1.4',
-            }
-        }
-    }
-
-    traits() {
-        return {};
-    }
-}
-`.replace("|||", "").trim();
-}
-
-// src/index.ts
-var merakiSdk = {
+// src/sdk.ts
+var sdk = {
   Meraki,
   MerakiScript,
-  generateNewSdkTemplate,
   generateRandomTokenData,
   version: "1.2.0"
 };
-globalThis.Meraki = (tokenData) => {
-  globalThis.Meraki = new merakiSdk.Meraki(tokenData.tokenId, tokenData.tokenHash);
-};
-globalThis.MerakiScript = merakiSdk.MerakiScript;
-globalThis.merakiSdk = merakiSdk;
-globalThis.registerScript = merakiSdk.Meraki.registerScript;
+var sdk_default = sdk;
+module.exports = __toCommonJS(sdk_exports);
 /*!
  * +----------------------------------------------------------------------------------+
  * | murmurHash3.js v3.0.0 (http://github.com/karanlyons/murmurHash3.js)              |

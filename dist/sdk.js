@@ -493,15 +493,17 @@ var murmurhash3 = {
 };
 
 // src/helpers.ts
-var generateRandomTokenData = (projectNum = 0) => {
+var generateRandomTokenData = (projectNum = 0, hash = "") => {
   const data = {
     tokenHash: "",
     tokenId: "",
     mintedAt: 0
   };
-  let hash = "0x";
-  for (let i = 0; i < 64; i++) {
-    hash += Math.floor(Math.random() * 16).toString(16);
+  if (hash.length === 0 || !hash.startsWith("0x")) {
+    hash = "0x";
+    for (let i = 0; i < 64; i++) {
+      hash += Math.floor(Math.random() * 16).toString(16);
+    }
   }
   data.tokenHash = hash;
   data.tokenId = (projectNum * 1e6 + Math.floor(Math.random() * 1e3)).toString();
@@ -766,8 +768,10 @@ var Meraki = class {
     return this.registerScriptCalled;
   }
   registerScript(scriptObject) {
-    this.registerScriptCalled = true;
-    globalThis[config_default.scriptInstanceName] = scriptObject;
+    if (!this.registerScriptCalled) {
+      this.registerScriptCalled = true;
+      globalThis[config_default.scriptInstanceName] = scriptObject;
+    }
     return scriptObject;
   }
   tokenAgeInSeconds() {
@@ -797,7 +801,8 @@ var MerakiScript = class {
 var sdk = {
   Meraki,
   MerakiScript,
-  generateRandomTokenData
+  generateRandomTokenData,
+  version: "1.2.0"
 };
 var sdk_default = sdk;
 export {
