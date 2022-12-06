@@ -82,6 +82,6 @@ export class BaseRandom {
 
     // shuffle an array of items using the Fisher-Yates algorithm
     shuffle(list) {
-        return fisherYatesShuffle(this.decimal, list);
+        return fisherYatesShuffle(() => this.decimal(), list);
     }
 }
