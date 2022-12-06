@@ -19,7 +19,7 @@ export interface MerakiTokenData {
 }
 
 // @ts-ignore
-const win: Record<any, any> = window || globalThis || {};
+export const win: Record<any, any> = globalThis || {};
 
 export class Meraki {
     protected tokenData: MerakiTokenData = {
@@ -100,7 +100,7 @@ export class Meraki {
     }
 
     protected isTestMode() {
-        const location = (<any>window).location;
+        const location = (<any>globalThis).location;
 
         if (!location) {
             return false;
