@@ -312,19 +312,37 @@ traits() {
 }
 ```
 
-A more efficient way might be to calculate the traits selected within the method itself:
+The best practice for generating traits for your artwork is to use the following pattern, generating the traits on the class initialization and storing them as properties:
 
 ```js
-traits() {
-    const traits = new ScriptTraits();
-
-    const color = Meraki.random.element(traits.color());
-    const size = Meraki.random.element(traits.size());
-
-    return {
-        color,
-        size,
+class Script extends MerakiScript {
+    traitValues = {
+        colorTheme: '',
+        internalPattern: '',
+        externalPattern: '',
     };
+
+    traitsPrepared = this.prepareTraits();
+
+    prepareTraits() {
+        const traits = new ScriptTraits();
+
+        this.traitValues.colorTheme = Meraki.random.element(traits.colorTheme());
+        this.traitValues.internalPattern = Meraki.random.element(traits.internalPattern());
+        this.traitValues.externalPattern = Meraki.random.element(traits.externalPattern());
+
+        return true;
+    }
+
+    // ...code omitted for brevity
+
+    traits() {
+        return {
+            colorTheme: this.traitValues.colorTheme,
+            externalPattern: this.traitValues.externalPattern,
+            internalPattern: this.traitValues.internalPattern,
+        };
+    }
 }
 ```
 
