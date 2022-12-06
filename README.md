@@ -250,7 +250,7 @@ Every script class must have a `configure` method that returns a `MerakiScriptCo
 
 - `animation`: a boolean indicating if the generated image is an animation. _optional_.
 - `sdkVersion`: a string containing the SDK version used when developing your script.  Valid values include '2', '2.0', '2.0.1', etc. _optional_.
-- `renderTimeMs`: an integer value that indicates an approximate time in milliseconds for how long the script takes to render. _optional_.
+- `renderTimeMs`: an integer value that indicates an approximate time in milliseconds for how long the script takes to render. If your artwork is an animation, it should be the number of milliseconds the longest render can take plus 20%. _optional_.
 - `library`: returns an object with `name` and `version` properties that specify the name and desired version of the rendering library to use. _required_.
 
 ```js
