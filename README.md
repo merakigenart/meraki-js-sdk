@@ -36,6 +36,7 @@
     - [The `ScriptTraits` class](#the-scripttraits-class)
     - [Creating Scripts for P5](#creating-scripts-for-p5)
     - [Animated Example Script](#animated-example-script)
+    - [Loading Resources](#loading-resources)
   - [SDK Development](#sdk-development)
     - [Setup](#setup)
     - [Testing](#testing)
@@ -317,9 +318,10 @@ The best practice for generating traits for your artwork is to use the following
 ```js
 class Script extends MerakiScript {
     traitValues = {
-        colorTheme: '',
-        internalPattern: '',
-        externalPattern: '',
+        color: '',
+        size: '',
+        speed: '',
+        palette: '',
     };
 
     traitsPrepared = this.prepareTraits();
@@ -327,9 +329,10 @@ class Script extends MerakiScript {
     prepareTraits() {
         const traits = new ScriptTraits();
 
-        this.traitValues.colorTheme = Meraki.random.element(traits.colorTheme());
-        this.traitValues.internalPattern = Meraki.random.element(traits.internalPattern());
-        this.traitValues.externalPattern = Meraki.random.element(traits.externalPattern());
+        this.traitValues.color = Meraki.random.element(traits.color());
+        this.traitValues.size = Meraki.random.element(traits.size());
+        this.traitValues.speed = Meraki.random.element(traits.speed());
+        this.traitValues.palette = Meraki.random.element(traits.palette());
 
         return true;
     }
@@ -337,11 +340,7 @@ class Script extends MerakiScript {
     // ...code omitted for brevity
 
     traits() {
-        return {
-            colorTheme: this.traitValues.colorTheme,
-            externalPattern: this.traitValues.externalPattern,
-            internalPattern: this.traitValues.internalPattern,
-        };
+        return this.traitValues;
     }
 }
 ```
@@ -523,6 +522,10 @@ The resulting animated image renders in the browser:
 <p align="center">
     <img style="width: 175px;" src="https://user-images.githubusercontent.com/5508707/149060364-5298974f-d1f1-4f4d-a430-7b51154b06d5.gif" alt="sample01" />
 </p>
+
+### Loading Resources
+
+If you need to use the `p5` `loadStrings()` or `loadFont()` methods, you may call them from your script; however, your assets must be submitted to us for review at assets@mraki.io.  We will review your assets and if approved we will provide you with a link to the assets to use in your script.
 
 ---
 
