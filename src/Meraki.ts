@@ -19,7 +19,7 @@ export interface MerakiTokenData {
 }
 
 // @ts-ignore
-const win: Record<any, any> = window || globalThis || {};
+export const win: Record<any, any> = globalThis || {};
 
 export class Meraki {
     protected tokenData: MerakiTokenData = {
@@ -68,6 +68,12 @@ export class Meraki {
         return this.registerScriptCalled;
     }
 
+    public log(...args: any[]) {
+        if (this.isTestMode()) {
+            console.log(...args);
+        }
+    }
+
     public registerScript(scriptObject: MerakiScript): MerakiScript {
         if (!this.registerScriptCalled) {
             this.registerScriptCalled = true;
@@ -91,5 +97,27 @@ export class Meraki {
         this.registerScriptCalled = false;
 
         this.randomObj = new BaseRandom({ tokenHash: `${hash}`, tokenId: `${tokenId}` });
+    }
+
+    protected isTestMode() {
+        const location = (<any>globalThis).location;
+
+        if (!location) {
+            return false;
+        }
+
+        if (location.pathname.startsWith('/projects/') && location.search.includes('randomSeed=')) {
+            return true;
+        }
+
+        if (location.origin === 'https://testnets.mraki.io') {
+            return true;
+        }
+
+        if (location.pathname.startsWith('/token/')) {
+            return false;
+        }
+
+        return false;
     }
 }

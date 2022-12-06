@@ -21,6 +21,7 @@
         - [`random`](#random)
         - [`window`](#window)
       - [Methods](#methods)
+        - [`log()`](#log)
         - [`registerScript()`](#registerscript)
         - [`tokenAgeInSeconds()`](#tokenageinseconds)
     - [The `Script` class](#the-script-class)
@@ -184,12 +185,12 @@ You may access the helper methods via the `Meraki.random` class, which provides 
 ```js
     // return true approxamtely 50% of the time
     for(let i = 0; i < 10; i++) {
-        console.log(`loop ${i + 1}: `, Meraki.random.boolean());
+        Meraki.log(`loop ${i + 1}: `, Meraki.random.boolean());
     }
 
     // return true approxamtely 10% of the time
     for(let i = 0; i < 10; i++) {
-        console.log(`loop ${i + 1}: `, Meraki.random.boolean(10));
+        Meraki.log(`loop ${i + 1}: `, Meraki.random.boolean(10));
     }
 
     const numberBelowTen = Meraki.random.element([1, 2, 3, 4, 5, 6, 7, 8, 9]);
@@ -207,6 +208,15 @@ interface MerakiWindowInformation {
 ```
 
 #### Methods
+
+##### `log()`
+
+The `Meraki.log()` method acts in the same manner as `console.log()`, and should be used **INSTEAD OF** `console.log`. Please do not use `console.log` directly to avoid polluting the console output in production/rendering environments.
+
+```js
+Meraki.log('hello world');
+Meraki.log('hello', 'world');
+```
 
 ##### `registerScript()`
 
@@ -469,7 +479,7 @@ export class Script extends MerakiScript {
 
     initialize() {
         super.initialize();
-        console.log('init');
+        Meraki.log('init');
     }
 
     version() {
