@@ -36,6 +36,7 @@
     - [The `ScriptTraits` class](#the-scripttraits-class)
     - [Creating Scripts for P5](#creating-scripts-for-p5)
     - [Animated Example Script](#animated-example-script)
+    - [Loading Resources](#loading-resources)
   - [SDK Development](#sdk-development)
     - [Setup](#setup)
     - [Testing](#testing)
@@ -249,7 +250,7 @@ Every script class must have a `configure` method that returns a `MerakiScriptCo
 
 - `animation`: a boolean indicating if the generated image is an animation. _optional_.
 - `sdkVersion`: a string containing the SDK version used when developing your script.  Valid values include '2', '2.0', '2.0.1', etc. _optional_.
-- `renderTimeMs`: an integer value that indicates an approximate time in milliseconds for how long the script takes to render. _optional_.
+- `renderTimeMs`: an integer value that indicates an approximate time in milliseconds for how long the script takes to render. If your artwork is an animation, it should be the number of milliseconds the longest render can take plus 20%. _optional_.
 - `library`: returns an object with `name` and `version` properties that specify the name and desired version of the rendering library to use. _required_.
 
 ```js
@@ -312,19 +313,35 @@ traits() {
 }
 ```
 
-A more efficient way might be to calculate the traits selected within the method itself:
+The best practice for generating traits for your artwork is to use the following pattern, generating the traits on the class initialization and storing them as properties:
 
 ```js
-traits() {
-    const traits = new ScriptTraits();
-
-    const color = Meraki.random.element(traits.color());
-    const size = Meraki.random.element(traits.size());
-
-    return {
-        color,
-        size,
+class Script extends MerakiScript {
+    traitValues = {
+        color: '',
+        size: '',
+        speed: '',
+        palette: '',
     };
+
+    traitsPrepared = this.prepareTraits();
+
+    prepareTraits() {
+        const traits = new ScriptTraits();
+
+        this.traitValues.color = Meraki.random.element(traits.color());
+        this.traitValues.size = Meraki.random.element(traits.size());
+        this.traitValues.speed = Meraki.random.element(traits.speed());
+        this.traitValues.palette = Meraki.random.element(traits.palette());
+
+        return true;
+    }
+
+    // ...code omitted for brevity
+
+    traits() {
+        return this.traitValues;
+    }
 }
 ```
 
@@ -505,6 +522,10 @@ The resulting animated image renders in the browser:
 <p align="center">
     <img style="width: 175px;" src="https://user-images.githubusercontent.com/5508707/149060364-5298974f-d1f1-4f4d-a430-7b51154b06d5.gif" alt="sample01" />
 </p>
+
+### Loading Resources
+
+If you need to use the `p5` `loadStrings()` or `loadFont()` methods, you may call them from your script; however, your assets must be submitted to us for review at assets@mraki.io.  We will review your assets and if approved we will provide you with a link to the assets to use in your script.
 
 ---
 
