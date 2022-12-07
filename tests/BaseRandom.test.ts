@@ -34,3 +34,14 @@ it('returns the same series of random values for each token', () => {
     expect(random1).toStrictEqual(random2);
     expect(random1).not.toStrictEqual(random3);
 });
+
+it('shuffles an array of numbers', () => {
+    const array1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const array2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+    const result1 = baseRandom.shuffle(array1);
+    const result2 = baseRandom.shuffle(array2);
+
+    expect(result1).not.toStrictEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    expect(result1).not.toStrictEqual(result2);
+});

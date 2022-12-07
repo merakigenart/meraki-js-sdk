@@ -1,3 +1,5 @@
+import fisherYatesShuffle from '@/lib/shuffle';
+
 export class BaseRandom {
     public useA = false;
     public prngA: () => number;
@@ -76,5 +78,10 @@ export class BaseRandom {
     // random value in an array of items
     element(list) {
         return list[this.integer(0, list.length - 1)];
+    }
+
+    // shuffle an array of items using the Fisher-Yates algorithm
+    shuffle(list) {
+        return fisherYatesShuffle(() => this.decimal(), list);
     }
 }
