@@ -243,7 +243,16 @@ function x86hash128(buf = new Uint8Array(0), state = 0, finalize = true) {
       const dtv2 = new DataView(blk.buffer);
       blk.set(rem);
       blk.set(buf.subarray(0, i), rem.byteLength);
-      [h1, h2, h3, h4] = x86mix128(h1, h2, h3, h4, dtv2.getUint32(0, true), dtv2.getUint32(4, true), dtv2.getUint32(8, true), dtv2.getUint32(12, true));
+      [h1, h2, h3, h4] = x86mix128(
+        h1,
+        h2,
+        h3,
+        h4,
+        dtv2.getUint32(0, true),
+        dtv2.getUint32(4, true),
+        dtv2.getUint32(8, true),
+        dtv2.getUint32(12, true)
+      );
     } else {
       const newBuf = new Uint8Array(buf.byteLength + rem.byteLength);
       newBuf.set(rem);
@@ -257,7 +266,16 @@ function x86hash128(buf = new Uint8Array(0), state = 0, finalize = true) {
   const bytes = buf.byteLength - i - remainder;
   len += bytes;
   for (; i < bytes; i += 16) {
-    [h1, h2, h3, h4] = x86mix128(h1, h2, h3, h4, dtv.getUint32(i, true), dtv.getUint32(i + 4, true), dtv.getUint32(i + 8, true), dtv.getUint32(i + 12, true));
+    [h1, h2, h3, h4] = x86mix128(
+      h1,
+      h2,
+      h3,
+      h4,
+      dtv.getUint32(i, true),
+      dtv.getUint32(i + 4, true),
+      dtv.getUint32(i + 8, true),
+      dtv.getUint32(i + 12, true)
+    );
   }
   if (!finalize) {
     return {
@@ -402,7 +420,12 @@ function x64hash128(buf = new Uint8Array(0), state = 0, finalize = true) {
       const dtv2 = new DataView(blk.buffer);
       blk.set(rem);
       blk.set(buf.subarray(0, i), rem.byteLength);
-      [h1, h2] = x64mix128(h1, h2, [dtv2.getUint32(4, true), dtv2.getUint32(0, true)], [dtv2.getUint32(12, true), dtv2.getUint32(8, true)]);
+      [h1, h2] = x64mix128(
+        h1,
+        h2,
+        [dtv2.getUint32(4, true), dtv2.getUint32(0, true)],
+        [dtv2.getUint32(12, true), dtv2.getUint32(8, true)]
+      );
     } else {
       const newBuf = new Uint8Array(buf.byteLength + rem.byteLength);
       newBuf.set(rem);
@@ -416,7 +439,12 @@ function x64hash128(buf = new Uint8Array(0), state = 0, finalize = true) {
   const bytes = buf.byteLength - i - remainder;
   len += bytes;
   for (; i < bytes; i += 16) {
-    [h1, h2] = x64mix128(h1, h2, [dtv.getUint32(i + 4, true), dtv.getUint32(i, true)], [dtv.getUint32(i + 12, true), dtv.getUint32(i + 8, true)]);
+    [h1, h2] = x64mix128(
+      h1,
+      h2,
+      [dtv.getUint32(i + 4, true), dtv.getUint32(i, true)],
+      [dtv.getUint32(i + 12, true), dtv.getUint32(i + 8, true)]
+    );
   }
   if (!finalize) {
     return {
@@ -659,6 +687,16 @@ function sha256(message) {
   return [H0, H1, H2, H3, H4, H5, H6, H7].map((e) => e.toString(16)).map((e) => pad(e, 8)).join("");
 }
 
+// src/lib/shuffle.ts
+function fisherYatesShuffle(randomFunc, originalArray) {
+  const result = originalArray.slice(0);
+  for (let i = result.length - 1; i > 0; i -= 1) {
+    const randomIndex = Math.floor(randomFunc() * (i + 1));
+    [result[i], result[randomIndex]] = [result[randomIndex], result[i]];
+  }
+  return result;
+}
+
 // src/BaseRandom.ts
 var BaseRandom = class {
   constructor(tokenData = { tokenHash: "", tokenId: "" }) {
@@ -719,10 +757,13 @@ var BaseRandom = class {
   element(list) {
     return list[this.integer(0, list.length - 1)];
   }
+  shuffle(list) {
+    return fisherYatesShuffle(() => this.decimal(), list);
+  }
 };
 
 // src/Meraki.ts
-var win = window || globalThis || {};
+var win = globalThis || {};
 var Meraki = class {
   constructor(tokenId, hash) {
     __publicField(this, "tokenData", {
@@ -767,6 +808,11 @@ var Meraki = class {
   get hasScriptRegistered() {
     return this.registerScriptCalled;
   }
+  log(...args) {
+    if (this.isTestMode()) {
+      console.log(...args);
+    }
+  }
   registerScript(scriptObject) {
     if (!this.registerScriptCalled) {
       this.registerScriptCalled = true;
@@ -779,6 +825,22 @@ var Meraki = class {
   }
   isScriptRegistered() {
     return this.registerScriptCalled;
+  }
+  isTestMode() {
+    const location = globalThis.location;
+    if (!location) {
+      return false;
+    }
+    if (location.pathname.startsWith("/projects/") && location.search.includes("randomSeed=")) {
+      return true;
+    }
+    if (location.origin === "https://testnets.mraki.io") {
+      return true;
+    }
+    if (location.pathname.startsWith("/token/")) {
+      return false;
+    }
+    return false;
   }
 };
 
@@ -802,7 +864,7 @@ var sdk = {
   Meraki,
   MerakiScript,
   generateRandomTokenData,
-  version: "1.2.0"
+  version: "1.3.0"
 };
 var sdk_default = sdk;
 export {
