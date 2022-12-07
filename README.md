@@ -182,6 +182,7 @@ You may access the helper methods via the `Meraki.random` class, which provides 
 - `element(array)`: returns a random element from the provided array
 - `integer(min, max)`: random integer; `max` is an optional integer value
 - `number(min, max)`: random number _(with a decimal value)_; `max` is an optional numeric value
+- `shuffle(array)`: returns a shuffled copy of the provided array
 
 ```js
     // return true approxamtely 50% of the time
