@@ -2,7 +2,19 @@
 
 All notable changes to `meraki-js-sdk` will be documented in this file.
 
+
 ---
+
+## v1.3.0 - 2022-12-07
+
+### What's Changed
+
+- Bump various dependencies
+- Add log function by @patinthehat in https://github.com/merakigenart/meraki-js-sdk/pull/57
+- Update documentation by @patinthehat in https://github.com/merakigenart/meraki-js-sdk/pull/58
+- Add shuffle method by @patinthehat in https://github.com/merakigenart/meraki-js-sdk/pull/59
+
+**Full Changelog**: https://github.com/merakigenart/meraki-js-sdk/compare/v1.2.0...v1.3.0
 
 ## 1.3.0 - 2022-Dec-06
 
@@ -20,7 +32,6 @@ All notable changes to `meraki-js-sdk` will be documented in this file.
 ## 1.1.2 - 2022-Feb-02
 
 - fix issue with `BaseRandom` class
-
 
 ## 1.1.1 - 2022-Feb-02
 
