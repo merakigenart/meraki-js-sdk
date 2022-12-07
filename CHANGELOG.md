@@ -4,6 +4,12 @@ All notable changes to `meraki-js-sdk` will be documented in this file.
 
 ---
 
+## 1.3.0 - 2022-Dec-06
+
+- Add `Meraki.random.shuffle()` method
+- Add `Meraki.log()` method
+- Update documentation
+
 ## 1.2.0 - 2022-Feb-17
 
 - Bump dependency versions
