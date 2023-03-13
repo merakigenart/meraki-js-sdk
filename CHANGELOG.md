@@ -5,6 +5,15 @@ All notable changes to `meraki-js-sdk` will be documented in this file.
 
 ---
 
+## v1.4.1 - 2023-03-13
+
+### What's Changed
+
+- Add remote script asset loading functionality by @patinthehat in https://github.com/merakigenart/meraki-js-sdk/pull/74
+- fix library build
+
+**Full Changelog**: https://github.com/merakigenart/meraki-js-sdk/compare/v1.3.0...v1.4.1
+
 ## v1.4.0 - 2023-03-13
 
 ### What's Changed
