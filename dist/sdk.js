@@ -2878,6 +2878,9 @@ var ensureSuffix = (path, suffix) => {
 };
 var Assets = class {
   sanitizeUrl(url) {
+    if (!url.startsWith("/") && !url.startsWith("http")) {
+      return url;
+    }
     const parsed = new URL(url);
     return parsed.pathname.replaceAll("..", "");
   }
@@ -3069,7 +3072,7 @@ var sdk = {
   MerakiScript: MerakiScript3,
   generateRandomTokenData,
   // @ts-ignore
-  version: "1.4.1"
+  version: "1.4.2"
 };
 var sdk_default = sdk;
 export {
