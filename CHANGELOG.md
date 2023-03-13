@@ -5,6 +5,12 @@ All notable changes to `meraki-js-sdk` will be documented in this file.
 
 ---
 
+## v1.4.2 - 2023-03-13
+
+- bug fixes
+
+**Full Changelog**: https://github.com/merakigenart/meraki-js-sdk/compare/v1.4.1...v1.4.2
+
 ## v1.4.1 - 2023-03-13
 
 ### What's Changed
