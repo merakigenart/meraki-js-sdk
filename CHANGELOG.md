@@ -5,6 +5,26 @@ All notable changes to `meraki-js-sdk` will be documented in this file.
 
 ---
 
+## v1.4.0 - 2023-03-13
+
+### What's Changed
+
+- Added script assets support
+- npm(deps-dev): bump esbuild from 0.15.18 to 0.16.4 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/60
+- Bump actions/cache from 3.0.11 to 3.2.0 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/61
+- Bump actions/cache from 3.2.0 to 3.2.1 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/62
+- Bump actions/cache from 3.2.1 to 3.2.2 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/63
+- Bump actions/setup-node from 3.5.1 to 3.6.0 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/64
+- Bump actions/cache from 3.2.2 to 3.2.3 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/65
+- npm(deps-dev): bump esbuild from 0.16.17 to 0.17.1 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/66
+- Bump dependabot/fetch-metadata from 1.3.5 to 1.3.6 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/67
+- Bump actions/cache from 3.2.3 to 3.2.4 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/70
+- Bump actions/cache from 3.2.4 to 3.2.5 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/71
+- Bump actions/cache from 3.2.5 to 3.2.6 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/72
+- Bump actions/cache from 3.2.6 to 3.3.0 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/73
+
+**Full Changelog**: https://github.com/merakigenart/meraki-js-sdk/compare/v1.3.0...v1.4.0
+
 ## v1.3.0 - 2022-12-06
 
 ### What's Changed
