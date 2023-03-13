@@ -6,6 +6,7 @@ import { sha256 } from '@/lib/sha256';
 import { MerakiScript } from '@/MerakiScript';
 import { chunkify } from '@/helpers';
 import { BaseRandom } from '@/BaseRandom';
+import { Assets } from '@/Assets';
 
 export interface Dimensions {
     height: number;
@@ -48,6 +49,10 @@ export class Meraki {
             },
             chunkify,
         };
+    }
+
+    get assets() {
+        return new Assets();
     }
 
     get canvas(): Dimensions {
