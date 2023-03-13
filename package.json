@@ -1,6 +1,6 @@
 {
     "name": "meraki-js-sdk",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "author": "Patrick Organ <patrick@mraki.io>",
     "description": "Meraki Javascript SDK",
     "license": "MIT",
