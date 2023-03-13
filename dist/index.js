@@ -3107,7 +3107,7 @@ var merakiSdk = {
   generateNewSdkTemplate,
   generateRandomTokenData,
   // @ts-ignore
-  version: "1.4.0"
+  version: "1.4.1"
 };
 globalThis.Meraki = (tokenData) => {
   globalThis.Meraki = new merakiSdk.Meraki(tokenData.tokenId, tokenData.tokenHash);

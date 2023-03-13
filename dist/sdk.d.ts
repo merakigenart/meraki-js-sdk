@@ -38,6 +38,15 @@ declare class BaseRandom {
 	element(list: any): any;
 	shuffle(list: any): any[];
 }
+declare class Assets {
+	protected sanitizeUrl(url: string): string;
+	loadStrings(path: string): Promise<any>;
+	loadXML(path: string): Promise<any>;
+	loadJSON(path: string): Promise<any>;
+	loadTable(path: string, extension: string, header: string, callback: any, errorCallback: any): Promise<any>;
+	loadImage(path: string, successCallback: any, failureCallback: any): Promise<any>;
+	loadShader(vertFilename: string, fragFilename: string, callback: any, errorCallback: any): Promise<any>;
+}
 export declare type Brand<Name, Type> = Type & {
 	_type?: Name;
 };
@@ -115,6 +124,7 @@ declare class Meraki {
 		};
 		chunkify: typeof chunkify;
 	};
+	get assets(): Assets;
 	get canvas(): Dimensions;
 	get window(): Dimensions;
 	get hasScriptRegistered(): boolean;
