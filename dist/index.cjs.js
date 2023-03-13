@@ -2879,6 +2879,10 @@ var ensureSuffix = (path, suffix) => {
 };
 var Assets = class {
   sanitizeUrl(url) {
+    if (!url.startsWith("/") && !url.startsWith("http")) {
+        return url;
+    }
+
     const parsed = new URL(url);
     return parsed.pathname.replaceAll("..", "");
   }
@@ -3108,7 +3112,7 @@ var merakiSdk = {
   generateNewSdkTemplate,
   generateRandomTokenData,
   // @ts-ignore
-  version: "1.4.0"
+  version: "1.4.1"
 };
 globalThis.Meraki = (tokenData) => {
   globalThis.Meraki = new merakiSdk.Meraki(tokenData.tokenId, tokenData.tokenHash);
