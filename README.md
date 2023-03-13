@@ -18,6 +18,7 @@
         - [`utils`](#utils)
           - [`hash`](#hash)
           - [`chunkify()`](#chunkify)
+        - [`assets`](#assets)
         - [`random`](#random)
         - [`window`](#window)
       - [Methods](#methods)
@@ -168,6 +169,23 @@ function chunkify(str: string, size: number): string[];
 ```js
 const hashChunks = Meraki.utils.chunkify(Meraki.data.tokenHash, 4);
 ```
+
+##### `assets`
+
+The `Meraki.assets` property provides access to several `p5.js` functions that are used to load assets.  These functions are:
+
+- `Meraki.assets.loadStrings()`
+- `Meraki.assets.loadTable()`
+- `Meraki.assets.loadJSON()`
+- `Meraki.assets.loadXML()`
+
+These functions are used to load assets from the Meraki CDN.  For example, to load a JSON file from the CDN:
+
+```js
+const data = await Meraki.assets.loadJSON('your-project-identifier/data.json');
+```
+
+These helper functions should be used instead of the `p5.js` equivalents.
 
 ##### `random`
 
