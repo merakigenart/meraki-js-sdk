@@ -15,6 +15,10 @@ const ensureSuffix = (path: string, suffix: string) => {
 
 export class Assets {
     protected sanitizeUrl(url: string) {
+        if (!url.startsWith('/') && !url.startsWith('http')) {
+            return url;
+        }
+
         const parsed = new URL(url);
         return parsed.pathname.replaceAll('..', '');
     }
