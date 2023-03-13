@@ -18,6 +18,7 @@
         - [`utils`](#utils)
           - [`hash`](#hash)
           - [`chunkify()`](#chunkify)
+        - [`assets`](#assets)
         - [`random`](#random)
         - [`window`](#window)
       - [Methods](#methods)
@@ -168,6 +169,34 @@ function chunkify(str: string, size: number): string[];
 ```js
 const hashChunks = Meraki.utils.chunkify(Meraki.data.tokenHash, 4);
 ```
+
+##### `assets`
+
+The `Meraki.assets` property provides access to several `p5.js` functions that are used to load assets.  These functions are:
+
+- `Meraki.assets.loadStrings()`
+- `Meraki.assets.loadTable()`
+- `Meraki.assets.loadJSON()`
+- `Meraki.assets.loadXML()`
+
+These functions are used to load assets from the Meraki CDN.  For example, to load a JSON file from the CDN:
+
+```js
+const data = await Meraki.assets.loadJSON('your-project-identifier/data.json');
+```
+
+These helper functions should be used instead of the `p5.js` equivalents.  
+
+> To add script assets for your script, see the "Script Assets" tab in the Meraki Artist dashboard.  On this tab, you can select the data format you'd like to use,
+> modify the contents of the script asset (JSON, etc.), and receive a URL that you can use to load the asset in your script, such as:
+> `a1c1c433-1ae9-2b9b-a8cd-62c55a12b5d2/data.json`
+> This URL would be used as follows:
+
+```js
+const data = await Meraki.assets.loadJSON('a1c1c433-1ae9-2b9b-a8cd-62c55a12b5d2/data.json');
+```
+
+Note the use of `await` in the example above.  The above functions are asynchronous and must be used with `await` or `then()`.
 
 ##### `random`
 
