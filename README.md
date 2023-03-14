@@ -248,11 +248,11 @@ class Script extends MerakiScript {
         text('hello from loadFont()', 10, 50);
     }
 
-    initialize() {
+    async initialize() {
         super.initialize();
         // must load the font in the initialize() method to ensure it is fully loaded by the
         // time rendering begins.
-        this.font = Meraki.assets.loadFont(`${Meraki.project.identifier}/38e6naM9.otf`);
+        this.font = await Meraki.assets.loadFont(`${Meraki.project.identifier}/38e6naM9.otf`);
     }
 
     version() {
