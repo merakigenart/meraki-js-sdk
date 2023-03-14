@@ -3,7 +3,8 @@ import axios from 'axios';
 /**
  * The base URL for all script assets, and must end with a trailing slash.
  */
-const MERAKI_SCRIPT_ASSETS_URL = 'https://mraki.io/script-assets/';
+const MERAKI_SCRIPT_DATA_ASSETS_URL = 'https://mraki.io/cdn/project-assets/data/';
+const MERAKI_SCRIPT_FILE_ASSETS_URL = 'https://mraki.io/cdn/project-assets/files/';
 
 const ensureSuffix = (path: string, suffix: string) => {
     if (path.endsWith(suffix)) {
@@ -24,7 +25,7 @@ export class Assets {
     }
 
     public async loadStrings(path: string) {
-        path = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, '/data.txt'));
+        path = MERAKI_SCRIPT_DATA_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, '/data.txt'));
 
         try {
             const { data } = await axios.get(path);
@@ -37,7 +38,7 @@ export class Assets {
     }
 
     public async loadXML(path: string) {
-        path = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, '/data.xml'));
+        path = MERAKI_SCRIPT_DATA_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, '/data.xml'));
 
         try {
             const { data } = await axios.get(path);
@@ -56,7 +57,7 @@ export class Assets {
      * @returns
      */
     public async loadJSON(path: string) {
-        path = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, '/data.json'));
+        path = MERAKI_SCRIPT_DATA_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, '/data.json'));
 
         try {
             // @ts-ignore
@@ -78,7 +79,7 @@ export class Assets {
      * @param {any} allback
      */
     public async loadTable(path: string, extension: string, header: string, callback: any, errorCallback: any) {
-        path = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, '/data.csv'));
+        path = MERAKI_SCRIPT_DATA_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, '/data.csv'));
 
         try {
             // @ts-ignore
@@ -99,13 +100,33 @@ export class Assets {
      */
     public async loadImage(path: string, successCallback, failureCallback) {
         if (!path.startsWith('data:image/png;base64')) {
-            path = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(path);
+            path = MERAKI_SCRIPT_FILE_ASSETS_URL + this.sanitizeUrl(path);
         }
 
         try {
             // @ts-ignore
             // eslint-disable-next-line no-undef
             return loadImage(path, successCallback, failureCallback);
+        } catch (e) {
+            //
+        }
+
+        return {};
+    }
+
+    /**
+     * Loads a font from the `path` script asset url and creates a p5.Font from it.
+     * @param {string} path
+     * @param {any} callback
+     * @param {any} onError
+     */
+    public async loadFont(path: string, callback: any, onError: any) {
+        path = MERAKI_SCRIPT_FILE_ASSETS_URL + this.sanitizeUrl(path);
+
+        try {
+            // @ts-ignore
+            // eslint-disable-next-line no-undef
+            return loadFont(path, callback, onError);
         } catch (e) {
             //
         }
@@ -121,8 +142,8 @@ export class Assets {
      * @param {any} errorCallback
      */
     public async loadShader(vertFilename: string, fragFilename: string, callback, errorCallback) {
-        vertFilename = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(vertFilename);
-        fragFilename = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(fragFilename);
+        vertFilename = MERAKI_SCRIPT_FILE_ASSETS_URL + this.sanitizeUrl(vertFilename);
+        fragFilename = MERAKI_SCRIPT_FILE_ASSETS_URL + this.sanitizeUrl(fragFilename);
 
         try {
             // @ts-ignore
