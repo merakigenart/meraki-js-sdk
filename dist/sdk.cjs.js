@@ -2894,7 +2894,8 @@ var {
 } = axios_default;
 
 // src/Assets.ts
-var MERAKI_SCRIPT_ASSETS_URL = "https://mraki.io/script-assets/";
+var MERAKI_SCRIPT_DATA_ASSETS_URL = "https://mraki.io/cdn/project-assets/data/";
+var MERAKI_SCRIPT_FILE_ASSETS_URL = "https://mraki.io/cdn/project-assets/files/";
 var ensureSuffix = (path, suffix) => {
   if (path.endsWith(suffix)) {
     return path;
@@ -2910,7 +2911,7 @@ var Assets = class {
     return parsed.pathname.replaceAll("..", "");
   }
   async loadStrings(path) {
-    path = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, "/data.txt"));
+    path = MERAKI_SCRIPT_DATA_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, "/data.txt"));
     try {
       const { data } = await axios_default.get(path);
       return data;
@@ -2919,7 +2920,7 @@ var Assets = class {
     return "";
   }
   async loadXML(path) {
-    path = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, "/data.xml"));
+    path = MERAKI_SCRIPT_DATA_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, "/data.xml"));
     try {
       const { data } = await axios_default.get(path);
       return data;
@@ -2934,7 +2935,7 @@ var Assets = class {
    * @returns
    */
   async loadJSON(path) {
-    path = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, "/data.json"));
+    path = MERAKI_SCRIPT_DATA_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, "/data.json"));
     try {
       return loadJSON(path);
     } catch (e) {
@@ -2950,7 +2951,7 @@ var Assets = class {
    * @param {any} allback
    */
   async loadTable(path, extension, header, callback, errorCallback) {
-    path = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, "/data.csv"));
+    path = MERAKI_SCRIPT_DATA_ASSETS_URL + this.sanitizeUrl(ensureSuffix(path, "/data.csv"));
     try {
       return loadTable(path, extension, header, callback, errorCallback);
     } catch (e) {
@@ -2965,10 +2966,24 @@ var Assets = class {
    */
   async loadImage(path, successCallback, failureCallback) {
     if (!path.startsWith("data:image/png;base64")) {
-      path = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(path);
+      path = MERAKI_SCRIPT_FILE_ASSETS_URL + this.sanitizeUrl(path);
     }
     try {
       return loadImage(path, successCallback, failureCallback);
+    } catch (e) {
+    }
+    return {};
+  }
+  /**
+   * Loads a font from the `path` script asset url and creates a p5.Font from it.
+   * @param {string} path
+   * @param {any} callback
+   * @param {any} onError
+   */
+  async loadFont(path, callback, onError) {
+    path = MERAKI_SCRIPT_FILE_ASSETS_URL + this.sanitizeUrl(path);
+    try {
+      return loadFont(path, callback, onError);
     } catch (e) {
     }
     return {};
@@ -2981,8 +2996,8 @@ var Assets = class {
    * @param {any} errorCallback
    */
   async loadShader(vertFilename, fragFilename, callback, errorCallback) {
-    vertFilename = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(vertFilename);
-    fragFilename = MERAKI_SCRIPT_ASSETS_URL + this.sanitizeUrl(fragFilename);
+    vertFilename = MERAKI_SCRIPT_FILE_ASSETS_URL + this.sanitizeUrl(vertFilename);
+    fragFilename = MERAKI_SCRIPT_FILE_ASSETS_URL + this.sanitizeUrl(fragFilename);
     try {
       return loadShader(vertFilename, fragFilename, callback, errorCallback);
     } catch (e) {
@@ -3039,6 +3054,9 @@ var Meraki = class {
   }
   get hasScriptRegistered() {
     return this.registerScriptCalled;
+  }
+  get project() {
+    return win.merakiProject || {};
   }
   log(...args) {
     if (this.isTestMode()) {
@@ -3097,7 +3115,7 @@ var sdk = {
   MerakiScript: MerakiScript3,
   generateRandomTokenData,
   // @ts-ignore
-  version: "1.4.2"
+  version: "1.4.3"
 };
 var sdk_default = sdk;
 /*!

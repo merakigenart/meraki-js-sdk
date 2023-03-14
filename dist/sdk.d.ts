@@ -45,6 +45,7 @@ declare class Assets {
 	loadJSON(path: string): Promise<any>;
 	loadTable(path: string, extension: string, header: string, callback: any, errorCallback: any): Promise<any>;
 	loadImage(path: string, successCallback: any, failureCallback: any): Promise<any>;
+	loadFont(path: string, callback: any, onError: any): Promise<any>;
 	loadShader(vertFilename: string, fragFilename: string, callback: any, errorCallback: any): Promise<any>;
 }
 export declare type Brand<Name, Type> = Type & {
@@ -82,6 +83,12 @@ export interface MerakiTokenData {
 	tokenHash: string;
 	tokenId: string;
 	mintedAt: number | string;
+}
+export interface MerakiProject {
+	identifier: string;
+	title: string;
+	symbol: string | null;
+	active: boolean;
 }
 declare class Meraki {
 	protected tokenData: MerakiTokenData;
@@ -128,6 +135,7 @@ declare class Meraki {
 	get canvas(): Dimensions;
 	get window(): Dimensions;
 	get hasScriptRegistered(): boolean;
+	get project(): MerakiProject;
 	log(...args: any[]): void;
 	registerScript(scriptObject: MerakiScript): MerakiScript;
 	tokenAgeInSeconds(): number;
