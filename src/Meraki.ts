@@ -19,6 +19,13 @@ export interface MerakiTokenData {
     mintedAt: number | string;
 }
 
+interface MerakiProject {
+    identifier: string;
+    title: string;
+    symbol: string | null;
+    active: boolean;
+}
+
 // @ts-ignore
 export const win: Record<any, any> = globalThis || {};
 
@@ -71,6 +78,10 @@ export class Meraki {
 
     get hasScriptRegistered() {
         return this.registerScriptCalled;
+    }
+
+    get project(): MerakiProject {
+        return win.merakiProject || {};
     }
 
     public log(...args: any[]) {
