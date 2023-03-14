@@ -13,6 +13,7 @@
   - [SDK Overview](#sdk-overview)
     - [The `Meraki` class](#the-meraki-class)
       - [Properties](#properties)
+        - [`project`](#project)
         - [`canvas`](#canvas)
         - [`data`](#data)
         - [`utils`](#utils)
@@ -105,6 +106,19 @@ Please see the [Artist Application](https://mraki.io/application) on [mraki.io](
 
 #### Properties
 
+##### `project`
+
+The `Meraki.project` property provides access to some information about the current project. It has the following properties:
+
+```ts
+interface MerakiProject {
+    identifier: string;
+    title: string;
+    symbol: string|null;
+    active: boolean;
+}
+```
+
 ##### `canvas`
 
 The `Meraki.canvas` property provides information about the canvas you should create.  It has `width` and `height` properties:
@@ -172,12 +186,20 @@ const hashChunks = Meraki.utils.chunkify(Meraki.data.tokenHash, 4);
 
 ##### `assets`
 
-The `Meraki.assets` property provides access to several `p5.js` functions that are used to load assets.  These functions are:
+The `Meraki.assets` property provides access to several `p5.js` functions that are used to load assets.  
+
+The functions for loading data files from the Meraki CDN are:
 
 - `Meraki.assets.loadStrings()`
 - `Meraki.assets.loadTable()`
 - `Meraki.assets.loadJSON()`
 - `Meraki.assets.loadXML()`
+
+Additionally, the following functions are provided for loading font, image and shader assets from the Meraki CDN:
+
+- `Meraki.assets.loadFont()`
+- `Meraki.assets.loadImage()`
+- `Meraki.assets.loadShader()`
 
 These functions are used to load assets from the Meraki CDN.  For example, to load a JSON file from the CDN:
 
@@ -196,7 +218,62 @@ These helper functions should be used instead of the `p5.js` equivalents.
 const data = await Meraki.assets.loadJSON('a1c1c433-1ae9-2b9b-a8cd-62c55a12b5d2/data.json');
 ```
 
-Note the use of `await` in the example above.  The above functions are asynchronous and must be used with `await` or `then()`.
+You can also access the project identifier for your script using the `Meraki.project.identifier` property:
+
+```js
+const data = await Meraki.assets.loadJSON(`${Meraki.project.identifier}/data.json`);
+```
+
+> Using `Meraki.project.identifier` should be preferred over hard-coding the project identifier in your script.
+
+Note the use of `await` in the example above.  The above functions are asynchronous and must be used with `await` or `then()` and should be placed in the `initialization` method of the `MerakiScript` class.
+
+Complete example using `Meraki.assets.loadFont()`:
+
+```js
+class Script extends MerakiScript {
+    font = null;
+
+    execute() {
+        createCanvas(Meraki.window.width, Meraki.window.height, WEBGL);
+        noLoop();
+    }
+
+    draw() {
+        super.draw();
+        
+        fill('#ED225D');
+        textFont(this.font);
+        textSize(36);
+        text('hello from loadFont()', 10, 50);
+    }
+
+    initialize() {
+        super.initialize();
+        // must load the font in the initialize() method to ensure it is fully loaded by the
+        // time rendering begins.
+        this.font = Meraki.assets.loadFont(`${Meraki.project.identifier}/38e6naM9.otf`);
+    }
+
+    version() {
+        return '0.0.1';
+    }
+
+    configure() {
+        return {
+            renderTimeMs: 50,
+            library: {
+                name: 'p5',
+                version: '1.4.0',
+            },
+        };
+    }
+
+    traits() {
+        return [];
+    }
+}
+```
 
 ##### `random`
 
