@@ -5,6 +5,15 @@ All notable changes to `meraki-js-sdk` will be documented in this file.
 
 ---
 
+## v1.4.3 - 2023-03-14
+
+### What's Changed
+
+- Bump actions/cache from 3.3.0 to 3.3.1 by @dependabot in https://github.com/merakigenart/meraki-js-sdk/pull/75
+- Add features by @patinthehat in https://github.com/merakigenart/meraki-js-sdk/pull/76
+
+**Full Changelog**: https://github.com/merakigenart/meraki-js-sdk/compare/v1.4.1...v1.4.3
+
 ## v1.4.2 - 2023-03-13
 
 - bug fixes
