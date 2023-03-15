@@ -44,6 +44,7 @@ declare class Assets {
 	loadXML(path: string): Promise<any>;
 	loadJSON(path: string): Promise<any>;
 	loadTable(path: string, extension: string, header: string, callback: any, errorCallback: any): Promise<any>;
+	loadBytes(path: string): Promise<any>;
 	loadImage(path: string, successCallback: any, failureCallback: any): Promise<any>;
 	loadFont(path: string, callback: any, onError: any): Promise<any>;
 	loadShader(vertFilename: string, fragFilename: string, callback: any, errorCallback: any): Promise<any>;
