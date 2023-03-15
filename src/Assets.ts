@@ -2,7 +2,7 @@
  * The base URL for all script assets, and must end with a trailing slash.
  */
 const getMerakiCdnHost = () => {
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    if (['localhost', '127.0.0.1'].includes(window.location.hostname)) {
         return window.location.host;
     }
     return `mraki.io`;
