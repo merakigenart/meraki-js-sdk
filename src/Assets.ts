@@ -3,13 +3,13 @@
  */
 const getMerakiCdnHost = () => {
     if (['localhost', '127.0.0.1'].includes(window.location.hostname)) {
-        return window.location.host;
+        return window.location.origin;
     }
-    return `mraki.io`;
+    return `https://mraki.io`;
 };
 
-const getMerakiScriptDataAssetsUrl = () => `https://${getMerakiCdnHost()}/cdn/project-assets/data/`;
-const getMerakiScriptFileAssetsUrl = () => `https://${getMerakiCdnHost()}/cdn/project-assets/files/`;
+const getMerakiScriptDataAssetsUrl = () => `${getMerakiCdnHost()}/cdn/project-assets/data/`;
+const getMerakiScriptFileAssetsUrl = () => `${getMerakiCdnHost()}/cdn/project-assets/files/`;
 
 const ensureSuffix = (path: string, suffix: string) => {
     if (path.endsWith(suffix)) {
