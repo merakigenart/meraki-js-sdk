@@ -111,6 +111,25 @@ export class Assets {
     }
 
     /**
+     * Loads a file from a script asset URL using `p5.loadBytes()`, and returns an object with a `bytes` property.
+     * @param {string} path
+     * @returns {object} an object whose 'bytes' property will be the loaded buffer
+     */
+    public async loadBytes(path: string) {
+        path = getMerakiScriptFileAssetsUrl() + this.sanitizeUrl(path);
+
+        try {
+            // @ts-ignore
+            // eslint-disable-next-line no-undef
+            return loadBytes(path);
+        } catch (e) {
+            //
+        }
+
+        return { bytes: [] };
+    }
+
+    /**
      * Loads an image from the `path` script asset URL and creates a `p5.Image` from it.
      * @param {string} path
      * @param {any} successCallback
