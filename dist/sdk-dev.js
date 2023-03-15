@@ -779,12 +779,12 @@ var BaseRandom = class {
 // src/Assets.ts
 var getMerakiCdnHost = () => {
   if (["localhost", "127.0.0.1"].includes(window.location.hostname)) {
-    return window.location.host;
+    return window.location.origin;
   }
-  return `mraki.io`;
+  return `https://mraki.io`;
 };
-var getMerakiScriptDataAssetsUrl = () => `https://${getMerakiCdnHost()}/cdn/project-assets/data/`;
-var getMerakiScriptFileAssetsUrl = () => `https://${getMerakiCdnHost()}/cdn/project-assets/files/`;
+var getMerakiScriptDataAssetsUrl = () => `${getMerakiCdnHost()}/cdn/project-assets/data/`;
+var getMerakiScriptFileAssetsUrl = () => `${getMerakiCdnHost()}/cdn/project-assets/files/`;
 var ensureSuffix = (path, suffix) => {
   if (path.endsWith(suffix)) {
     return path;
@@ -1029,7 +1029,7 @@ var sdk = {
   MerakiScript: MerakiScript3,
   generateRandomTokenData,
   // @ts-ignore
-  version: "1.4.4"
+  version: "1.4.5"
 };
 var sdk_default = sdk;
 
