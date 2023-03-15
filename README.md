@@ -20,6 +20,8 @@
           - [`hash`](#hash)
           - [`chunkify()`](#chunkify)
         - [`assets`](#assets)
+          - [Examples](#examples)
+          - [Complete Example with `loadFont()`](#complete-example-with-loadfont)
         - [`random`](#random)
         - [`window`](#window)
       - [Methods](#methods)
@@ -195,13 +197,20 @@ The functions for loading data files from the Meraki CDN are:
 - `Meraki.assets.loadJSON()`
 - `Meraki.assets.loadXML()`
 
-Additionally, the following functions are provided for loading font, image and shader assets from the Meraki CDN:
+Additionally, the following functions are provided for loading font, image, shader and other assets from the Meraki CDN:
 
+- `Meraki.assets.loadBytes()`
 - `Meraki.assets.loadFont()`
 - `Meraki.assets.loadImage()`
 - `Meraki.assets.loadShader()`
 
-These functions are used to load assets from the Meraki CDN.  For example, to load a JSON file from the CDN:
+These functions are used to load assets from the Meraki CDN, and MUST be used in place of the original p5 functions.
+
+For information on how to use the functions, see the [p5.js documentation](https://p5js.org/reference/#/p5/).
+
+###### Examples
+
+To load a JSON file from the CDN:
 
 ```js
 const data = await Meraki.assets.loadJSON('your-project-identifier/data.json');
@@ -227,6 +236,8 @@ const data = await Meraki.assets.loadJSON(`${Meraki.project.identifier}/data.jso
 > Using `Meraki.project.identifier` should be preferred over hard-coding the project identifier in your script.
 
 Note the use of `await` in the example above.  The above functions are asynchronous and must be used with `await` or `then()` and should be placed in the `initialization` method of the `MerakiScript` class.
+
+###### Complete Example with `loadFont()`
 
 Complete example using `Meraki.assets.loadFont()`:
 
@@ -274,6 +285,9 @@ class Script extends MerakiScript {
     }
 }
 ```
+
+> When using `Meraki.assets.loadFont()`, `Meraki.assets.loadImage()`, or `Meraki.assets.loadShader()`, access the correct filename 
+> for the asset from the "Digital Assets" tab in the Meraki Artist dashboard.
 
 ##### `random`
 
