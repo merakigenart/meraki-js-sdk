@@ -20,6 +20,7 @@
           - [`hash`](#hash)
           - [`chunkify()`](#chunkify)
         - [`assets`](#assets)
+          - [Supported File Types](#supported-file-types)
           - [Examples](#examples)
           - [Complete Example with `loadFont()`](#complete-example-with-loadfont)
         - [`random`](#random)
@@ -207,6 +208,11 @@ Additionally, the following functions are provided for loading font, image, shad
 These functions are used to load assets from the Meraki CDN, and MUST be used in place of the original p5 functions.
 
 For information on how to use the functions, see the [p5.js documentation](https://p5js.org/reference/#/p5/).
+
+###### Supported File Types
+
+- `Meraki.assets.loadImage()` supports png, jpg, and svg files.
+- `Meraki.assets.loadFont()` supports ttf and otf files.
 
 ###### Examples
 
