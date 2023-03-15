@@ -102,7 +102,7 @@ class Builder {
                 entryPoints: [buildConfig.entry],
                 // outdir: buildConfig.outdir || '',
                 bundle: buildConfig.bundle,
-                external: ['util'],
+                external: ['util', 'p5'],
                 format: buildConfig.format,
                 platform: buildConfig.platform.name,
                 target: buildConfig.target || `${buildConfig.platform.name}${buildConfig.platform.version}`,
