@@ -23,3 +23,4 @@ prettier.config.js
 rollup.*.js
 tsconfig.json
 .gitattributes
+globals.d.ts
