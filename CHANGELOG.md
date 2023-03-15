@@ -5,6 +5,14 @@ All notable changes to `meraki-js-sdk` will be documented in this file.
 
 ---
 
+## v1.4.4 - 2023-03-15
+
+- add `loadBytes()` support
+- fix implementation of `loadStrings()` and `loadXML()`
+- documentation updates
+
+**Full Changelog**: https://github.com/merakigenart/meraki-js-sdk/compare/v1.4.3...v1.4.4
+
 ## v1.4.3 - 2023-03-14
 
 ### What's Changed
