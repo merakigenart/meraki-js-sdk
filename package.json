@@ -80,6 +80,6 @@
         "p5": "^1.6.0",
         "prettier": "^2.7.1",
         "ts-jest": "^29.0.3",
-        "typescript": "^4.8"
+        "typescript": "^5.0"
     }
 }
